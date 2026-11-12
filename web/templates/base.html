@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <title>{% block title %}{% endblock %} · Hotel Desk</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/system.css') }}">
+  <script src="{{ url_for('static', filename='js/interface.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Đến nội dung chính</a>
+  <header class="site-header container">
+    <a class="wordmark" href="{{ url_for('pages.guests') }}" aria-label="Hotel Desk — trang khách hàng"><span class="brand-symbol" aria-hidden="true">H<span></span></span>Hotel Desk<span class="brand-dot">.</span></a>
+    <button class="button menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">☰</span></button>
+    <nav id="navigation" aria-label="Điều hướng chính">
+      {% for endpoint, label in [('guests', 'Hồ sơ khách hàng'), ('services', 'Danh mục dịch vụ')] %}
+      <a href="{{ url_for('pages.' + endpoint) }}" {% if active == endpoint %}aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+  </header>
+  <main id="main" class="container workspace">
+    <section class="introduction" aria-labelledby="page-title">
+      <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> KHÔNG GIAN LỄ TÂN</p>
+      <h1 id="page-title">{% block heading %}{% endblock %}</h1>
+      <p class="lead">{% block description %}{% endblock %}</p>
+      <div class="page-context"><span class="context-number">{% block number %}{% endblock %}</span><div><strong>{% block context_title %}{% endblock %}</strong><p>{% block context_text %}{% endblock %}</p></div></div>
+      <aside class="guide"><p class="eyebrow">TRƯỚC KHI LƯU</p>{% block guide %}{% endblock %}</aside>
+    </section>
+    <section class="entry-section" aria-labelledby="form-title">
+      <div class="browser-top" aria-hidden="true"><span></span><span></span><span></span><span class="browser-label">HOTEL DESK / {% block browser_label %}{% endblock %}</span></div>
+      <div class="form-panel">
+        <div class="form-heading"><span class="form-icon" aria-hidden="true">{% block icon %}{% endblock %}</span><div><h2 id="form-title">{% block form_title %}{% endblock %}</h2><p>{% block form_hint %}{% endblock %}</p></div></div>
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+          <div class="notice notice-{{ category }}" role="{{ 'alert' if category == 'error' else 'status' }}"><strong>{{ 'Cần kiểm tra' if category == 'error' else 'Đã cập nhật' if category == 'success' else 'Thông tin' }}</strong><p>{{ message }}</p></div>
+        {% endfor %}
+        {% block form %}{% endblock %}
+      </div>
+      <p class="panel-caption"><span aria-hidden="true">↳</span> {% block caption %}{% endblock %}</p>
+    </section>
+  </main>
+  <footer class="container site-footer"><span>Hotel Desk <span class="footer-slash">/</span> Quản lý khách sạn</span><span>Thông tin chính xác. Đón tiếp chu đáo.</span></footer>
+</body>
+</html>
