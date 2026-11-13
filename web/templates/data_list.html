@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}{{ list_title }}{% endblock %}
+{% block heading %}{{ list_title }}{% endblock %}
+{% block section_name %}DANH SÁCH DỮ LIỆU{% endblock %}
+{% block description %}Toàn bộ thông tin đã lưu, sắp xếp theo mã mới nhất.{% endblock %}
+{% block content %}
+  {% include 'components/notices.html' %}
+  <section class="data-panel" aria-labelledby="table-title">
+    <div class="table-toolbar">
+      <div><h2 id="table-title">{{ table_name }}</h2>{% if rows is not none %}<p class="row-count">{{ rows|length }} bản ghi</p>{% endif %}</div>
+      <div class="table-actions">
+        <a class="button" href="{{ url_for('pages.' + active) }}">Làm mới</a>
+        <a class="button button-primary" href="{{ url_for('pages.' + create_endpoint) }}">{{ create_label }}</a>
+      </div>
+    </div>
+    {% if rows is not none %}
+    <div class="table-scroll" role="region" aria-label="{{ list_title }}" tabindex="0">
+      <table class="data-table" aria-labelledby="table-title">
+        <thead><tr>{% for column in columns %}<th scope="col">{{ column }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>{% for value in row %}<td{% if value is none %} class="null-value"{% endif %}>{{ 'NULL' if value is none else value }}</td>{% endfor %}</tr>
+          {% else %}
+          <tr><td class="empty-state" colspan="{{ columns|length }}">Chưa có dữ liệu.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="table-unavailable">Không tải được dữ liệu. Chọn Làm mới để thử lại.</p>
+    {% endif %}
+  </section>
+{% endblock %}

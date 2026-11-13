@@ -1,0 +1,3 @@
+{% for category, message in get_flashed_messages(with_categories=true) %}
+  <div class="notice notice-{{ category }}" role="{{ 'alert' if category == 'error' else 'status' }}"><strong>{{ 'Cần kiểm tra' if category == 'error' else 'Đã cập nhật' if category == 'success' else 'Thông tin' }}</strong><p>{{ message }}</p></div>
+{% endfor %}

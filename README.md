@@ -1,15 +1,21 @@
 # Hotel Desk — website nhập liệu khách sạn
 
-Giao diện web tiếng Việt dùng Flask + Jinja, chạy trong trình duyệt, kết nối cùng MySQL `hotel` với Workbench. Hai trang hiện có:
+Giao diện web tiếng Việt dùng Flask + Jinja, chạy trong trình duyệt, kết nối cùng MySQL `hotel` với Workbench. Các trang hiện có:
 
-- `/khach-hang`: tạo hồ sơ và kiểm tra hồ sơ theo CCCD ngay trong biểu mẫu.
+- `/khach-hang`: tạo hồ sơ khách hàng; nếu CCCD trùng thì báo lỗi và giữ thông tin đã nhập.
 - `/dich-vu`: thêm danh mục dịch vụ trực tiếp, không cần phòng hoặc khách đang lưu trú.
+- `/danh-sach/khach-hang`: xem toàn bộ khách hàng dưới dạng bảng.
+- `/danh-sach/dich-vu`: xem toàn bộ dịch vụ dưới dạng bảng.
 
 Chưa triển khai màn hình tìm kiếm nghiệp vụ (mục 6) và báo cáo/xuất tệp (mục 7). Không dùng CustomTkinter nữa.
 
+Giao diện dạng bảng điều khiển: sidebar bên trái có nhóm **Quản lý thông tin** chứa hai mục con **Hồ sơ khách hàng** và **Danh mục dịch vụ**; vùng nội dung bên phải chứa tiêu đề và biểu mẫu. Trên màn hình nhỏ, dùng nút **Menu** để mở thanh chức năng.
+
+Nhóm **Danh sách dữ liệu** trên sidebar chứa **Danh sách khách hàng** và **Danh sách dịch vụ**. Hai trang đọc đầy đủ các cột và dòng từ bảng `KhachHang`/`DichVu`, sắp xếp mã giảm dần, hiển thị tổng số bản ghi. Nút **Làm mới** đọc lại dữ liệu MySQL, kể cả dữ liệu thêm từ Workbench. Bảng cuộn ngang trên màn hình nhỏ; giá trị SQL NULL hiển thị là `NULL`, chuỗi rỗng giữ nguyên ô trống. Các trang danh sách chỉ đọc dữ liệu.
+
 ## Chạy trên Windows
 
-Python 3.11 trở lên. Khi thiết lập MySQL lần đầu, tạo schema `hotel`, chạy `sql/khach-san.sql` rồi `sql/nhap-lieu-khach-san.sql`. Nếu đã có dữ liệu, sử dụng database hiện tại; không chạy lại script khởi tạo.
+Python 3.11 trở lên. Khi thiết lập MySQL lần đầu, chạy `sql/khach-san.sql` để tạo database `hotel` và các bảng. Nếu đã có dữ liệu, sử dụng database hiện tại; không chạy lại script khởi tạo.
 
 `sql/khach-san.sql` chỉ định nghĩa bảng, ràng buộc và trigger; không thêm khách, phòng hay lượt lưu trú mẫu. Hai form Khách hàng và Danh mục dịch vụ có thể nhập dữ liệu ngay khi các bảng đang trống.
 
@@ -25,29 +31,20 @@ Kết nối mặc định: `127.0.0.1:3306`, tài khoản `root`, database `hote
 
 ## Cấu trúc
 
-Nếu không lưu được và báo **Mã MySQL: 1305**, database đang thiếu thủ tục nhập liệu. Dừng web bằng Ctrl+C và chạy:
-
-```powershell
-.\.venv\Scripts\python.exe app.py --init-db
-.\.venv\Scripts\python.exe app.py
-```
-
-Nhập mật khẩu MySQL khi mỗi lệnh yêu cầu. `--init-db` đọc `sql/nhap-lieu-khach-san.sql` và chỉ tạo `ThemKhachHang` nếu chưa có, không xóa bảng, không chạy lại dữ liệu mẫu và không ghi đè thủ tục đã tồn tại. Tài khoản cài đặt cần quyền CREATE ROUTINE trong `hotel`. Sau đó lưu hồ sơ trên web như bình thường.
-
-Trang Danh mục dịch vụ dùng INSERT trực tiếp, không cần thủ tục hoặc dữ liệu phòng/lượt lưu trú.
+Hai trang Khách hàng và Danh mục dịch vụ kiểm tra dữ liệu ở phía server, dùng `INSERT` có tham số để thêm trực tiếp vào bảng `KhachHang` và `DichVu`, rồi commit khi thành công. Không cần stored procedure hoặc chạy `--init-db`. Tài khoản MySQL cần quyền `SELECT` và `INSERT` trên cả `KhachHang` và `DichVu`.
 
 ```text
 app.py                         Điểm chạy web, nhập mật khẩu ở terminal
-database_setup.py              Cài thủ tục còn thiếu qua --init-db
 sql/                           Schema khách sạn và SQL cho hai form hiện tại
 config.py / database.py         Cấu hình và thao tác MySQL hiện có
 web/__init__.py                 Application factory, CSRF, cấu hình phiên
-web/routes.py                   Hai trang và luồng GET/POST
+web/routes.py                   Các trang nhập liệu GET/POST và danh sách GET
 web/validation.py               Kiểm tra dữ liệu phía server
-web/templates/base.html        Header, điều hướng, bố cục, thông báo, footer
+web/templates/base.html        Sidebar, thanh tiêu đề, bố cục, thông báo, footer
 web/templates/components/      Macro trường nhập, select, CSRF dùng chung
 web/templates/guests.html      Nội dung riêng của trang khách hàng
 web/templates/services.html    Nội dung riêng của trang dịch vụ
+web/templates/data_list.html   Bảng dữ liệu dùng chung cho khách hàng/dịch vụ
 web/static/css/system.css      Design tokens, component và responsive
 web/static/js/interface.js     Menu mobile, phản hồi khi gửi biểu mẫu
 web/static/fonts/              Host Grotesk tự lưu trữ và giấy phép OFL
@@ -75,13 +72,22 @@ Các kiểm thử dùng database giả lập, không ghi dữ liệu MySQL thậ
 
 Mở `/dich-vu`, nhập tên `Nước uống`, đơn vị `chai`, đơn giá `20000`, trạng thái `Đang cung cấp`, rồi bấm **Lưu dịch vụ**. Không cần tạo phòng hoặc lượt lưu trú. Giá là số nguyên đồng từ 0 đến 99999999999999, không dùng dấu chấm/phẩy phân cách. Tên tối đa 100 ký tự, đơn vị tối đa 30 ký tự.
 
+Nhập trực tiếp bằng SQL:
+
+```sql
+use hotel;
+insert into DichVu (TenDichVu, DonViTinh, DonGiaHienHanh, TrangThai)
+values ('Nước uống', 'chai', 20000, 'Đang cung cấp');
+commit;
+```
+
 Trong một tab Query của Workbench, chạy lại câu sau để xem dịch vụ mới:
 
 ```sql
-SELECT MaDichVu, TenDichVu, DonViTinh, DonGiaHienHanh, TrangThai
-FROM hotel.DichVu
-ORDER BY MaDichVu DESC
-LIMIT 20;
+select MaDichVu, TenDichVu, DonViTinh, DonGiaHienHanh, TrangThai
+from hotel.DichVu
+order by MaDichVu desc
+limit 20;
 ```
 
 Đối chiếu dòng mới nhất với thông tin vừa nhập. Refresh trang sau khi lưu không thêm dòng; bấm lưu một biểu mẫu hợp lệ lần nữa sẽ tạo dịch vụ mới, kể cả trùng tên. Nút **Làm mới** xóa biểu mẫu và đưa trạng thái về `Đang cung cấp`.

@@ -1,17 +1,16 @@
 {% macro csrf() %}<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">{% endmacro %}
-{% macro field(name, label, value='', placeholder='', required=false, maxlength=100, inputmode='text', hint='', autocomplete='off') %}
+{% macro field(name, label, value='', required=false, maxlength=100, inputmode='text', autocomplete='off') %}
 <div class="field">
-  <label for="{{ name }}">{{ label }}{% if required %} <span aria-hidden="true">*</span>{% else %} <span class="optional">Không bắt buộc</span>{% endif %}</label>
-  <input id="{{ name }}" name="{{ name }}" value="{{ value }}" placeholder="{{ placeholder }}" maxlength="{{ maxlength }}" inputmode="{{ inputmode }}" {% if required %}required{% endif %} {% if hint %}aria-describedby="{{ name }}-hint"{% endif %} autocomplete="{{ autocomplete }}">
-  {% if hint %}<p class="field-hint" id="{{ name }}-hint">{{ hint }}</p>{% endif %}
+  <label for="{{ name }}">{{ label }}</label>
+  <input id="{{ name }}" name="{{ name }}" value="{{ value }}" maxlength="{{ maxlength }}" inputmode="{{ inputmode }}" {% if required %}required{% endif %} autocomplete="{{ autocomplete }}">
 </div>
 {% endmacro %}
-{% macro select(name, label, placeholder, options, selected='', disabled=false) %}
+{% macro select(name, label, options, selected='', disabled=false) %}
 <div class="field">
-  <label for="{{ name }}">{{ label }} <span aria-hidden="true">*</span></label>
+  <label for="{{ name }}">{{ label }}</label>
   <div class="select-wrap"><select id="{{ name }}" name="{{ name }}" required {% if disabled %}disabled{% endif %}>
-    <option value="">{{ placeholder }}</option>
+    <option value="" disabled hidden></option>
     {% for value, text in options %}<option value="{{ value }}" {% if value|string == selected %}selected{% endif %}>{{ text }}</option>{% endfor %}
-  </select><span aria-hidden="true">⌄</span></div>
+  </select></div>
 </div>
 {% endmacro %}

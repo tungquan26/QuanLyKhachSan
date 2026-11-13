@@ -1,33 +1,21 @@
 {% extends 'base.html' %}
 {% from 'components/forms.html' import csrf, field, select with context %}
 {% block title %}Danh mục dịch vụ{% endblock %}
-{% block heading %}Danh mục <br>dịch vụ{% endblock %}
+{% block heading %}Danh mục dịch vụ{% endblock %}
 {% block description %}Thiết lập dịch vụ của khách sạn, từ đơn vị tính đến giá cung cấp.{% endblock %}
-{% block number %}02{% endblock %}
-{% block context_title %}Thêm dịch vụ, sẵn sàng đón khách.{% endblock %}
-{% block context_text %}Nhập trực tiếp thông tin dịch vụ mới.{% endblock %}
-{% block guide %}
-<h3>Rõ đơn vị tính.<br>Đúng giá cung cấp.</h3>
-<p>Ví dụ: dịch vụ <strong>Nước uống</strong>, đơn vị <strong>chai</strong>, giá <strong>20000</strong> đồng. Chọn trạng thái phù hợp trước khi lưu.</p>
-{% endblock %}
-{% block browser_label %}DỊCH VỤ{% endblock %}
-{% block icon %}＋{% endblock %}
 {% block form_title %}Thông tin dịch vụ{% endblock %}
-{% block form_hint %}Điền thông tin bên dưới để tạo dịch vụ mới.{% endblock %}
 {% block form %}
 <form method="post" data-entry-form>
   {{ csrf() }}
-  {{ field('name', 'Tên dịch vụ', values.name, 'Ví dụ: Nước uống', required=true) }}
-  {{ field('unit', 'Đơn vị tính', values.unit, 'Ví dụ: chai, kg, lần', required=true, maxlength=30) }}
-  {{ field('price', 'Đơn giá (đồng)', values.price, 'Ví dụ: 20000', required=true, maxlength=14, inputmode='numeric', hint='Nhập số nguyên từ 0 đến 99999999999999, không dùng dấu phân cách hàng nghìn.') }}
+  {{ field('name', 'Tên dịch vụ', values.name, required=true) }}
+  {{ field('unit', 'Đơn vị tính', values.unit, required=true, maxlength=30) }}
+  {{ field('price', 'Đơn giá (đồng)', values.price, required=true, maxlength=14, inputmode='numeric') }}
   {% set options = [] %}
   {% for status in statuses %}{% set _ = options.append((status, status)) %}{% endfor %}
-  {{ select('status', 'Trạng thái', 'Chọn trạng thái', options, values.status) }}
-  <p class="required-note">* Thông tin bắt buộc</p>
+  {{ select('status', 'Trạng thái', options, values.status) }}
   <div class="form-actions">
     <a class="button" href="{{ url_for('pages.services') }}">Làm mới</a>
-    <button class="button button-primary" type="submit">Lưu dịch vụ <span aria-hidden="true">↗</span></button>
+    <button class="button button-primary" type="submit">Lưu dịch vụ</button>
   </div>
 </form>
 {% endblock %}
-{% block caption %}Mỗi lần lưu tạo một dịch vụ mới trong danh mục.{% endblock %}

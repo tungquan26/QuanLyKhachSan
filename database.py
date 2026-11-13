@@ -8,25 +8,33 @@ def run_sql(sql, params, password, *, read=False):
             cursor.execute(sql, params)
             if read:
                 return cursor.fetchall()
-            # CALL also returns a final status result. Consume every result
-            # before COMMIT so the connection is ready for another command.
-            while cursor.nextset():
-                pass
             connection.commit()
 
 
-def find_guest(cccd, password):
-    return run_sql("SELECT MaKhachHang, HoTen, SoDienThoai FROM KhachHang WHERE CCCD=%s",
-                   (cccd,), password, read=True)
+def list_guests(password):
+    return run_sql(
+        "select MaKhachHang, HoTen, CCCD, SoDienThoai from KhachHang "
+        "order by MaKhachHang desc", (), password, read=True,
+    )
+
+
+def list_services(password):
+    return run_sql(
+        "select MaDichVu, TenDichVu, DonViTinh, DonGiaHienHanh, TrangThai from DichVu "
+        "order by MaDichVu desc", (), password, read=True,
+    )
 
 
 def add_guest(name, cccd, phone, password):
-    run_sql("CALL ThemKhachHang(%s, %s, %s)", (name, cccd, phone), password)
+    run_sql(
+        "insert into KhachHang (HoTen, CCCD, SoDienThoai) values (%s, %s, %s)",
+        (name, cccd, phone), password,
+    )
 
 
 def add_service(name, unit, price, status, password):
     run_sql(
-        "INSERT INTO DichVu (TenDichVu, DonViTinh, DonGiaHienHanh, TrangThai) "
-        "VALUES (%s, %s, %s, %s)",
+        "insert into DichVu (TenDichVu, DonViTinh, DonGiaHienHanh, TrangThai) "
+        "values (%s, %s, %s, %s)",
         (name, unit, price, status), password,
     )
