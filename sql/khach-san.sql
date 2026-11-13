@@ -1,5 +1,5 @@
+create database hotel;
 use hotel;
-set names utf8mb4;
 
 -- 1. Danh mục
 create table KhachHang (
@@ -75,31 +75,3 @@ create table LanSuDungDichVu (
     foreign key (MaDichVu) references DichVu(MaDichVu)
 );
 
--- 3. Quy tắc chốt giá phòng
--- Chốt giá niêm yết của loại phòng khi thêm chi tiết đặt phòng.
--- Giá đã chốt không đổi khi bảng giá của LoaiPhong thay đổi.
--- drop trigger if exists ChiTietDatPhong_ChotGia;
--- drop trigger if exists ChiTietDatPhong_KhoaGia;
--- delimiter //
--- create trigger ChiTietDatPhong_ChotGia
--- before insert on ChiTietDatPhong
--- for each row
--- begin
---     set new.DonGiaPhongApDung = (
---         select lp.GiaNiemYetMoiDem
---         from Phong as p
---         join LoaiPhong as lp on lp.MaLoaiPhong = p.MaLoaiPhong
---         where p.MaPhong = new.MaPhong
---     );
--- end //
-
--- create trigger ChiTietDatPhong_KhoaGia
--- before update on ChiTietDatPhong
--- for each row
--- begin
---     if new.DonGiaPhongApDung <> old.DonGiaPhongApDung then
---         signal sqlstate '45000'
---             set message_text = 'DonGiaPhongApDung da duoc chot khi dat phong';
---     end if;
--- end //
--- delimiter ;
