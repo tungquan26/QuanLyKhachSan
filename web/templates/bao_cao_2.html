@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% from 'components/forms.html' import csrf, field %}
+{% block title %}Doanh thu dịch vụ{% endblock %}
+{% block section_name %}BÁO CÁO THỐNG KÊ{% endblock %}
+{% block heading %}Doanh thu dịch vụ{% endblock %}
+{% block description %}Xem doanh thu dịch vụ theo khoảng ngày và xuất báo cáo Excel.{% endblock %}
+{% block content %}
+<div class="report-layout">
+  <section class="form-panel" aria-labelledby="filter-title">
+    <div class="form-heading"><h2 id="filter-title">Điều kiện báo cáo</h2></div>
+    {% include 'components/notices.html' %}
+    <form method="post" action="{{ url_for('bao_cao_2.bao_cao_doanh_thu_dich_vu') }}">
+      {{ csrf() }}
+      <div class="report-dates">
+        <div class="field">
+          <label for="tu_ngay">Từ ngày</label>
+          <input id="tu_ngay" name="tu_ngay" type="date" value="{{ tu_ngay }}" min="0001-01-01" max="9999-12-31" required>
+        </div>
+        <div class="field">
+          <label for="den_ngay">Đến ngày</label>
+          <input id="den_ngay" name="den_ngay" type="date" value="{{ den_ngay }}" min="0001-01-01" max="9999-12-31" required>
+        </div>
+      </div>
+      {{ field('ten_cong_ty', 'Tên đơn vị trên báo cáo', ten_cong_ty, required=true) }}
+      <div class="form-actions form-actions-end">
+        <button type="submit" class="button button-primary">Xem báo cáo</button>
+        <button type="submit" class="button" formaction="{{ url_for('bao_cao_2.xuat_excel_doanh_thu_dich_vu') }}">Xuất Excel (.xlsx)</button>
+      </div>
+    </form>
+  </section>
+
+  {% if rows is not none %}
+  <section class="data-panel report-preview" aria-labelledby="report-title">
+    <div class="table-toolbar">
+      <div>
+        <p class="report-company">{{ ten_cong_ty }}</p>
+        <h2 id="report-title">Báo cáo thống kê doanh thu dịch vụ</h2>
+        <p class="row-count">Từ ngày {{ tu_ngay[8:10] }}/{{ tu_ngay[5:7] }}/{{ tu_ngay[:4] }} đến ngày {{ den_ngay[8:10] }}/{{ den_ngay[5:7] }}/{{ den_ngay[:4] }}</p>
+      </div>
+      <p class="row-count">Đơn vị tiền: VND</p>
+    </div>
+    <div class="table-scroll" role="region" aria-label="Chi tiết doanh thu dịch vụ" tabindex="0">
+      <table class="data-table" aria-labelledby="report-title">
+        <thead><tr>
+          <th scope="col">STT</th><th scope="col">Tên dịch vụ</th><th scope="col">Đơn vị tính</th>
+          <th scope="col" class="numeric">Số lượng</th><th scope="col" class="numeric">Đơn giá</th><th scope="col" class="numeric">Thành tiền</th>
+        </tr></thead>
+        <tbody>
+          {% for ten, don_vi, so_luong, don_gia, thanh_tien in rows %}
+          <tr>
+            <td>{{ loop.index }}</td><td>{{ ten }}</td><td>{{ don_vi }}</td>
+            <td class="numeric">{{ format_money(so_luong) }}</td><td class="numeric">{{ format_money(don_gia) }}</td><td class="numeric">{{ format_money(thanh_tien) }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" class="empty-state">Không có dữ liệu phát sinh trong khoảng ngày đã chọn.</td></tr>
+          {% endfor %}
+        </tbody>
+        <tfoot><tr><th scope="row" colspan="5">Tổng cộng</th><td class="numeric">{{ format_money(tong_cong) }}</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="report-signatures">
+      <div><p class="report-sign-title">Người tạo báo cáo</p><p>Kế toán / Trưởng bộ phận Lễ tân</p><p>(Ký, ghi rõ họ tên)</p></div>
+      <div><p>{{ ngay_in }}</p><p class="report-sign-title">Ban Giám đốc</p><p>(Người nhận)</p><p>(Ký, ghi rõ họ tên)</p></div>
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% from 'components/forms.html' import csrf, field, select with context %}
-{% block title %}Danh mục dịch vụ{% endblock %}
-{% block heading %}Danh mục dịch vụ{% endblock %}
+{% block title %}{{ 'Sửa dịch vụ' if editing else 'Danh mục dịch vụ' }}{% endblock %}
+{% block heading %}{{ 'Sửa dịch vụ' if editing else 'Danh mục dịch vụ' }}{% endblock %}
 {% block description %}Thiết lập dịch vụ của khách sạn, từ đơn vị tính đến giá cung cấp.{% endblock %}
 {% block form_title %}Thông tin dịch vụ{% endblock %}
 {% block form %}
@@ -14,8 +14,8 @@
   {% for status in statuses %}{% set _ = options.append((status, status)) %}{% endfor %}
   {{ select('status', 'Trạng thái', options, values.status) }}
   <div class="form-actions">
-    <a class="button" href="{{ url_for('pages.services') }}">Làm mới</a>
-    <button class="button button-primary" type="submit">Lưu dịch vụ</button>
+    <a class="button" href="{{ url_for('pages.service_list' if editing else 'pages.services') }}">{{ 'Hủy' if editing else 'Làm mới' }}</a>
+    <button class="button button-primary" type="submit">{{ 'Lưu thay đổi' if editing else 'Lưu dịch vụ' }}</button>
   </div>
 </form>
 {% endblock %}

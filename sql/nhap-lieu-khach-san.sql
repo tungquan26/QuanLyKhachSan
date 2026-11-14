@@ -113,4 +113,4 @@ insert into ThanhToan (MaPhieu, ThoiDiemGiaoDich, LoaiGiaoDich, SoTien) values (
 insert into ThanhToan (MaPhieu, ThoiDiemGiaoDich, LoaiGiaoDich, SoTien) values (7, '2026-10-16 11:10:00', 'Thanh toán', 3100000);
 insert into ThanhToan (MaPhieu, ThoiDiemGiaoDich, LoaiGiaoDich, SoTien) values (8, '2026-10-18 11:10:00', 'Thanh toán', 4600000);
 
-select * from ThanhToan 
+select makhachhang, hoten, cccd, sodienthoai from khachhang where makhachhang

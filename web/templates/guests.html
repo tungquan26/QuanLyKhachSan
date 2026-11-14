@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% from 'components/forms.html' import csrf, field with context %}
-{% block title %}Hồ sơ khách hàng{% endblock %}
-{% block heading %}Hồ sơ khách hàng{% endblock %}
+{% block title %}{{ 'Sửa hồ sơ khách hàng' if editing else 'Hồ sơ khách hàng' }}{% endblock %}
+{% block heading %}{{ 'Sửa hồ sơ khách hàng' if editing else 'Hồ sơ khách hàng' }}{% endblock %}
 {% block description %}Chăm sóc khách hàng bắt đầu từ những thông tin chính xác.{% endblock %}
 {% block form_title %}Thông tin khách hàng{% endblock %}
 {% block form %}
@@ -10,6 +10,9 @@
   {{ field('name', 'Họ và tên', values.name, required=true, autocomplete='name') }}
   {{ field('cccd', 'Số CCCD', values.cccd, required=true, maxlength=12, inputmode='numeric') }}
   {{ field('phone', 'Số điện thoại', values.phone, maxlength=20, inputmode='tel', autocomplete='tel') }}
-  <div class="form-actions form-actions-end"><button class="button button-primary" type="submit" name="action" value="save">Lưu hồ sơ</button></div>
+  <div class="form-actions form-actions-end">
+    {% if editing %}<a class="button" href="{{ url_for('pages.guest_list') }}">Hủy</a>{% endif %}
+    <button class="button button-primary" type="submit" name="action" value="save">{{ 'Lưu thay đổi' if editing else 'Lưu hồ sơ' }}</button>
+  </div>
 </form>
 {% endblock %}

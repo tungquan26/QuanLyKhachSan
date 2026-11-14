@@ -1,7 +1,6 @@
 create database hotel;
 use hotel;
 
--- 1. Danh mục
 create table KhachHang (
     MaKhachHang int primary key auto_increment,
     HoTen varchar(100) not null,
@@ -37,7 +36,6 @@ create table DichVu (
     TrangThai varchar(40) not null
 );
 
--- 2. Giao dịch
 create table PhieuDatPhong (
     MaPhieu int primary key auto_increment,
     MaKhachHang int not null,

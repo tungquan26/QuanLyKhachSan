@@ -7,11 +7,21 @@ Giao diện web tiếng Việt dùng Flask + Jinja, chạy trong trình duyệt,
 - `/danh-sach/khach-hang`: xem toàn bộ khách hàng dưới dạng bảng.
 - `/danh-sach/dich-vu`: xem toàn bộ dịch vụ dưới dạng bảng.
 
-Chưa triển khai màn hình tìm kiếm nghiệp vụ (mục 6) và báo cáo/xuất tệp (mục 7). Không dùng CustomTkinter nữa.
+Chưa triển khai màn hình tìm kiếm nghiệp vụ (mục 6). Không dùng CustomTkinter nữa.
+
+## Báo cáo doanh thu dịch vụ
+
+Mở **Báo cáo thống kê → Doanh thu dịch vụ** trên sidebar, hoặc `/bao-cao/doanh-thu-dich-vu`. Chọn khoảng ngày, nhập tên đơn vị trên báo cáo rồi bấm **Xem báo cáo** hoặc **Xuất Excel (.xlsx)**. Cài lại `pip install -r requirements.txt` để có thư viện `openpyxl`.
+
+Báo cáo đọc bảng `LanSuDungDichVu` kết hợp `DichVu`, gồm cả ngày bắt đầu và ngày kết thúc. Doanh thu tính bằng số lượng nhân đơn giá áp dụng lúc sử dụng; một dịch vụ có nhiều đơn giá được tách thành các dòng riêng. Số lượng lẻ và phần lẻ của thành tiền được giữ nguyên. Tên đơn vị chỉ dùng làm tiêu đề, không lọc dữ liệu theo chi nhánh. File Excel giữ mẫu báo cáo với tổng cộng, ngày lập, vùng ký và cấu hình in A4. Ngày lập dùng múi giờ Việt Nam.
+
+Tài khoản MySQL cần quyền `SELECT` trên hai bảng này. Không có dữ liệu thì báo cáo hiển thị rỗng với tổng bằng 0; lỗi truy vấn sẽ báo lỗi và không tải file Excel. Không cần chạy lại SQL hay tạo thủ tục. Các URL cũ `/bao-cao`, `/bao-cao-2`, `/bao_cao_2` vẫn dùng được.
 
 Giao diện dạng bảng điều khiển: sidebar bên trái có nhóm **Quản lý thông tin** chứa hai mục con **Hồ sơ khách hàng** và **Danh mục dịch vụ**; vùng nội dung bên phải chứa tiêu đề và biểu mẫu. Trên màn hình nhỏ, dùng nút **Menu** để mở thanh chức năng.
 
-Nhóm **Danh sách dữ liệu** trên sidebar chứa **Danh sách khách hàng** và **Danh sách dịch vụ**. Hai trang đọc đầy đủ các cột và dòng từ bảng `KhachHang`/`DichVu`, sắp xếp mã giảm dần, hiển thị tổng số bản ghi. Nút **Làm mới** đọc lại dữ liệu MySQL, kể cả dữ liệu thêm từ Workbench. Bảng cuộn ngang trên màn hình nhỏ; giá trị SQL NULL hiển thị là `NULL`, chuỗi rỗng giữ nguyên ô trống. Các trang danh sách chỉ đọc dữ liệu.
+Nhóm **Danh sách dữ liệu** trên sidebar chứa **Danh sách khách hàng** và **Danh sách dịch vụ**. Hai trang đọc toàn bộ dòng từ bảng `KhachHang`/`DichVu`, sắp xếp theo mã tự tăng từ nhỏ đến lớn để dữ liệu nhập trước ở trên, nhập sau ở cuối danh sách, hiển thị tổng số bản ghi. Cột mã khóa chính được ẩn trên giao diện và thay bằng **STT**, đánh số liên tục từ 1 tăng dần; mã trong database được giữ nguyên. Nút **Làm mới** đọc lại dữ liệu MySQL, kể cả dữ liệu thêm từ Workbench, và đánh lại STT theo danh sách hiện tại. Bảng cuộn ngang trên màn hình nhỏ; giá trị SQL NULL hiển thị là `NULL`, chuỗi rỗng giữ nguyên ô trống. Mỗi dòng có nút **Sửa** mở biểu mẫu chứa dữ liệu hiện tại.
+
+Để chỉnh dữ liệu: vào danh sách khách hàng/dịch vụ → **Sửa** ở dòng cần đổi → chỉnh thông tin → **Lưu thay đổi**. Có thể sửa họ tên, CCCD, số điện thoại; hoặc tên dịch vụ, đơn vị tính, đơn giá, trạng thái cung cấp. Nút **Hủy** quay về danh sách. Cập nhật theo mã gốc, không tạo dòng mới, không đổi khóa chính hay thứ tự dòng. Khi dữ liệu không hợp lệ hoặc CCCD trùng, biểu mẫu giữ thông tin đã nhập và báo lỗi. Bản ghi đã bị xóa sẽ được thông báo và quay về danh sách.
 
 ## Chạy trên Windows
 
@@ -31,14 +41,14 @@ Kết nối mặc định: `127.0.0.1:3306`, tài khoản `root`, database `hote
 
 ## Cấu trúc
 
-Hai trang Khách hàng và Danh mục dịch vụ kiểm tra dữ liệu ở phía server, dùng `INSERT` có tham số để thêm trực tiếp vào bảng `KhachHang` và `DichVu`, rồi commit khi thành công. Không cần stored procedure hoặc chạy `--init-db`. Tài khoản MySQL cần quyền `SELECT` và `INSERT` trên cả `KhachHang` và `DichVu`.
+Hai trang Khách hàng và Danh mục dịch vụ kiểm tra dữ liệu ở phía server, dùng `INSERT` có tham số để thêm và `UPDATE ... WHERE` có tham số để sửa bảng `KhachHang` và `DichVu`, rồi commit khi thành công. Không cần stored procedure hoặc chạy `--init-db`. Tài khoản MySQL cần quyền `SELECT`, `INSERT` và `UPDATE` trên cả `KhachHang` và `DichVu`.
 
 ```text
 app.py                         Điểm chạy web, nhập mật khẩu ở terminal
 sql/                           Schema khách sạn và SQL cho hai form hiện tại
 config.py / database.py         Cấu hình và thao tác MySQL hiện có
 web/__init__.py                 Application factory, CSRF, cấu hình phiên
-web/routes.py                   Các trang nhập liệu GET/POST và danh sách GET
+web/routes.py                   Các trang thêm/sửa GET/POST và danh sách GET
 web/validation.py               Kiểm tra dữ liệu phía server
 web/templates/base.html        Sidebar, thanh tiêu đề, bố cục, thông báo, footer
 web/templates/components/      Macro trường nhập, select, CSRF dùng chung

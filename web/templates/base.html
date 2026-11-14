@@ -1,4 +1,4 @@
-{% set page_labels = {'guests': 'Hồ sơ khách hàng', 'services': 'Danh mục dịch vụ', 'guest_list': 'Danh sách khách hàng', 'service_list': 'Danh sách dịch vụ'} %}
+{% set page_labels = {'guests': 'Hồ sơ khách hàng', 'services': 'Danh mục dịch vụ', 'guest_list': 'Danh sách khách hàng', 'service_list': 'Danh sách dịch vụ', 'bao_cao_2': 'Doanh thu dịch vụ'} %}
 <!doctype html>
 <html lang="vi">
 <head>
@@ -34,6 +34,12 @@
           {% for endpoint, label in [('guest_list', 'Danh sách khách hàng'), ('service_list', 'Danh sách dịch vụ')] %}
           <a href="{{ url_for('pages.' + endpoint) }}" {% if active == endpoint %}aria-current="page"{% endif %}>{{ label }}</a>
           {% endfor %}
+        </div>
+      </details>
+      <details class="nav-group" open>
+        <summary>Báo cáo thống kê</summary>
+        <div class="nav-children">
+          <a href="{{ url_for('bao_cao_2.bao_cao_doanh_thu_dich_vu') }}" {% if active == 'bao_cao_2' %}aria-current="page"{% endif %}>Doanh thu dịch vụ</a>
         </div>
       </details>
     </nav>

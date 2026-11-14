@@ -2,7 +2,7 @@
 {% block title %}{{ list_title }}{% endblock %}
 {% block heading %}{{ list_title }}{% endblock %}
 {% block section_name %}DANH SÁCH DỮ LIỆU{% endblock %}
-{% block description %}Toàn bộ thông tin đã lưu, sắp xếp theo mã mới nhất.{% endblock %}
+{% block description %}Dữ liệu thêm trước ở trên, thêm sau ở cuối danh sách. STT tăng dần từ 1.{% endblock %}
 {% block content %}
   {% include 'components/notices.html' %}
   <section class="data-panel" aria-labelledby="table-title">
@@ -16,12 +16,12 @@
     {% if rows is not none %}
     <div class="table-scroll" role="region" aria-label="{{ list_title }}" tabindex="0">
       <table class="data-table" aria-labelledby="table-title">
-        <thead><tr>{% for column in columns %}<th scope="col">{{ column }}</th>{% endfor %}</tr></thead>
+        <thead><tr>{% for column in columns %}<th scope="col">{{ column }}</th>{% endfor %}<th scope="col">Thao tác</th></tr></thead>
         <tbody>
           {% for row in rows %}
-          <tr>{% for value in row %}<td{% if value is none %} class="null-value"{% endif %}>{{ 'NULL' if value is none else value }}</td>{% endfor %}</tr>
+          <tr><td>{{ loop.index }}</td>{% for value in row[1:] %}<td{% if value is none %} class="null-value"{% endif %}>{{ 'NULL' if value is none else value }}</td>{% endfor %}<td><a class="button" href="{{ url_for('pages.edit_guest' if active == 'guest_list' else 'pages.edit_service', record_id=row[0]) }}" aria-label="Sửa {{ row[1] }}">Sửa</a></td></tr>
           {% else %}
-          <tr><td class="empty-state" colspan="{{ columns|length }}">Chưa có dữ liệu.</td></tr>
+          <tr><td class="empty-state" colspan="{{ columns|length + 1 }}">Chưa có dữ liệu.</td></tr>
           {% endfor %}
         </tbody>
       </table>

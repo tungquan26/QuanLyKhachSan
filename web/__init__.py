@@ -35,4 +35,6 @@ def create_app(test_config=None):
 
     from .routes import pages
     app.register_blueprint(pages)
+    from bao_cao_2 import bao_cao_2_bp
+    app.register_blueprint(bao_cao_2_bp)
     return app
