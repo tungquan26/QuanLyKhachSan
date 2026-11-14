@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}Báo cáo thống kê doanh thu{% endblock %}
+{% block heading %}Báo cáo <br>doanh thu{% endblock %}
+{% block description %}Trích xuất báo cáo doanh thu theo khoảng thời gian và công ty/chi nhánh, hỗ trợ xem trước và xuất file Excel (.xlsx).{% endblock %}
+{% block number %}03{% endblock %}
+{% block context_title %}Thống kê doanh thu theo ngày.{% endblock %}
+{% block context_text %}Chọn khoảng thời gian, bấm Thực hiện để xem trước hoặc bấm Xuất Excel.{% endblock %}
+{% block guide %}
+<h3>Giao diện tiêu chuẩn.<br>Xuất báo cáo Excel.</h3>
+<p>Chọn <strong>Từ ngày</strong>, <strong>Đến ngày</strong> và <strong>Công ty/Chi nhánh</strong>. Nhấn <strong>Thực hiện</strong> để hiển thị mẫu báo cáo. Nhấn <strong>Xuất Excel</strong> để tải file <code>.xlsx</code> chuẩn in ấn.</p>
+{% endblock %}
+{% block browser_label %}BÁO CÁO DOANH THU{% endblock %}
+{% block icon %}📊{% endblock %}
+{% block form_title %}Báo cáo thống kê doanh thu{% endblock %}
+{% block form_hint %}Chọn tiêu chí và nhấn Thực hiện để truy vấn.{% endblock %}
+{% block form %}
+
+<!-- Khung hộp giao diện chọn báo cáo (Thiết kế theo mẫu Hình 1) -->
+<div style="background:#f0f2f5;border:1px solid #d1d5db;border-radius:8px;overflow:hidden;margin-bottom:28px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+  <div style="background:#e5e7eb;padding:8px 16px;border-bottom:1px solid #d1d5db;font-weight:600;font-size:14px;color:#374151;display:flex;align-items:center;gap:8px">
+    <span style="display:inline-block;width:12px;height:12px;background:#f59e0b;border-radius:2px"></span>
+    Báo cáo thống kê
+  </div>
+
+  <form id="reportFilterForm" method="post" action="{{ url_for('bao_cao_2.bao_cao_doanh_thu_dich_vu') }}">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
+    <div style="display:grid;grid-template-columns:220px 1fr;min-height:240px;background:white">
+      <!-- Cột trái: Danh sách loại báo cáo (Hình 1) -->
+      <div style="border-right:1px solid #e5e7eb;background:#fafafa;padding:12px 0">
+        <div style="padding:10px 16px;background:#e0e7ff;color:#1e40af;font-weight:600;font-size:14px;border-left:3px solid #2563eb;cursor:pointer">
+          Doanh thu theo Ngày - Dịch vụ
+        </div>
+        <div style="padding:10px 16px;color:#4b5563;font-size:14px;cursor:pointer">
+          Doanh thu theo Ngày - Đơn vị
+        </div>
+        <div style="padding:10px 16px;color:#4b5563;font-size:14px;cursor:pointer">
+          Doanh thu theo Ngày - Công ty
+        </div>
+      </div>
+
+      <!-- Cột phải: Nhập điều kiện lọc (Hình 1) -->
+      <div style="padding:24px 28px;display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <!-- Hàng chọn Từ ngày - Đến ngày -->
+          <div style="display:flex;gap:24px;align-items:center;margin-bottom:20px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:10px">
+              <label for="tu_ngay" style="font-weight:600;color:#1e3a8a;font-size:15px;white-space:nowrap">Từ ngày</label>
+              <input id="tu_ngay" name="tu_ngay" type="date" value="{{ tu_ngay }}" required style="padding:8px 12px;border:1px solid #9ca3af;border-radius:4px;font-size:14px;min-height:auto;width:170px">
+            </div>
+
+            <div style="display:flex;align-items:center;gap:10px">
+              <label for="den_ngay" style="font-weight:600;color:#1e3a8a;font-size:15px;white-space:nowrap">Đến ngày</label>
+              <input id="den_ngay" name="den_ngay" type="date" value="{{ den_ngay }}" required style="padding:8px 12px;border:1px solid #9ca3af;border-radius:4px;font-size:14px;min-height:auto;width:170px">
+            </div>
+          </div>
+
+          <!-- Hàng chọn Công ty / Chi nhánh -->
+          <div style="margin-bottom:20px">
+            <label for="ten_cong_ty" style="display:block;font-weight:600;color:#1e3a8a;font-size:15px;margin-bottom:8px">Công ty/Chi nhánh</label>
+            <div class="select-wrap" style="max-width:440px">
+              <select id="ten_cong_ty" name="ten_cong_ty" style="width:100%;padding:9px 12px;border:1px solid #9ca3af;border-radius:4px;font-size:14px;min-height:auto">
+                <option value="Khách sạn Hotel Desk" {% if ten_cong_ty == 'Khách sạn Hotel Desk' %}selected{% endif %}>Khách sạn Hotel Desk</option>
+                <option value="Công ty TNHH TM DV&DL Hotels" {% if ten_cong_ty == 'Công ty TNHH TM DV&DL Hotels' %}selected{% endif %}>Công ty TNHH TM DV&DL Hotels</option>
+                <option value="Khách sạn New World" {% if ten_cong_ty == 'Khách sạn New World' %}selected{% endif %}>Khách sạn New World</option>
+                <option value="Khách sạn Thành Nam" {% if ten_cong_ty == 'Khách sạn Thành Nam' %}selected{% endif %}>Khách sạn Thành Nam</option>
+              </select>
+              <span aria-hidden="true">⌄</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hàng 2 nút: Thực hiện và Đóng/Xuất Excel (Hình 1) -->
+        <div style="display:flex;justify-content:flex-end;gap:14px;padding-top:16px;border-top:1px solid #f3f4f6">
+          <button type="submit" class="button" style="background:#f3f4f6;border:1px solid #9ca3af;color:#1f2937;padding:8px 20px;border-radius:4px;font-weight:600;display:inline-flex;align-items:center;gap:8px">
+            <span style="color:#16a34a;font-size:16px">✔</span> Thực hiện
+          </button>
+
+          <button type="submit" formaction="{{ url_for('bao_cao_2.xuat_excel_doanh_thu_dich_vu') }}" class="button button-primary" style="padding:8px 24px;border-radius:4px;font-weight:600;display:inline-flex;align-items:center;gap:8px">
+            <span aria-hidden="true">⬇</span> Xuất Excel (.xlsx)
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Tờ giấy Báo cáo xem trước (Mô phỏng 100% theo mẫu Hình 2) -->
+{% if executed %}
+<div style="background:white;border:1px solid #d1d5db;border-radius:6px;padding:48px 40px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);font-family:'Times New Roman', Times, serif;color:#000;margin-top:24px">
+  
+  <!-- 1. Tên công ty góc trên bên trái -->
+  <div style="font-weight:bold;font-size:16px;margin-bottom:20px">
+    {{ ten_cong_ty }}
+  </div>
+
+  <!-- 2. Tiêu đề in hoa đậm chính giữa -->
+  <div style="text-align:center;margin-bottom:6px">
+    <h2 style="font-size:22px;font-weight:bold;letter-spacing:0.5px;margin:0;color:#000">
+      DOANH THU DỊCH VỤ THEO NGÀY
+    </h2>
+  </div>
+
+  <!-- 3. Khoảng ngày: Từ ngày: ... Đến ngày: ... -->
+  <div style="text-align:center;font-style:italic;font-size:15px;margin-bottom:28px">
+    Từ ngày: {{ tu_ngay }} Đến ngày: {{ den_ngay }}
+  </div>
+
+  <!-- 4. Bảng số liệu kẻ khung viền đen (Hình 2) -->
+  <table style="width:100%;border-collapse:collapse;border:1px solid #000;font-size:14px;margin-bottom:20px">
+    <thead>
+      <tr style="background:#f9fafb">
+        <th style="border:1px solid #000;padding:8px;text-align:center;width:45px;font-weight:bold">STT</th>
+        <th style="border:1px solid #000;padding:8px;text-align:left;font-weight:bold">TÊN DỊCH VỤ</th>
+        <th style="border:1px solid #000;padding:8px;text-align:center;width:110px;font-weight:bold">ĐƠN VỊ TÍNH</th>
+        <th style="border:1px solid #000;padding:8px;text-align:right;width:140px;font-weight:bold">ĐƠN GIÁ</th>
+        <th style="border:1px solid #000;padding:8px;text-align:right;width:150px;font-weight:bold">THÀNH TIỀN</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if rows %}
+        {% for r in rows %}
+        <tr>
+          <td style="border:1px solid #000;padding:8px;text-align:center">{{ loop.index }}</td>
+          <td style="border:1px solid #000;padding:8px;text-align:left">{{ r.ten }} (x{{ r.so_luong|int }})</td>
+          <td style="border:1px solid #000;padding:8px;text-align:center">{{ r.don_vi }}</td>
+          <td style="border:1px solid #000;padding:8px;text-align:right">{{ format_money(r.don_gia) }}</td>
+          <td style="border:1px solid #000;padding:8px;text-align:right">{{ format_money(r.thanh_tien) }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="5" style="border:1px solid #000;padding:16px;text-align:center;font-style:italic;color:#6b7280">
+            (Không có dữ liệu phát sinh trong khoảng thời gian này)
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+    <tfoot>
+      <tr style="font-weight:bold">
+        <td colspan="4" style="border:1px solid #000;padding:10px 12px;text-align:center">TỔNG CỘNG</td>
+        <td style="border:1px solid #000;padding:10px 12px;text-align:right">{{ format_money(tong_cong) }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- 5. Chân trang: Ngày tháng và Người lập / Ban Giám đốc (Hình 2) -->
+  <div style="display:flex;justify-content:flex-end;margin-top:30px">
+    <div style="text-align:center;min-width:280px">
+      <div style="font-style:italic;font-size:14px;margin-bottom:8px">{{ ngay_in }}</div>
+      <div style="font-weight:bold;font-size:15px;margin-bottom:4px">Người lập báo cáo</div>
+      <div style="font-size:13px;font-style:italic;color:#4b5563;margin-bottom:50px">(Kế toán / Trưởng bộ phận Lễ tân)</div>
+      <div style="font-size:13px;font-style:italic;color:#6b7280">(Ký, ghi rõ họ tên)</div>
+    </div>
+  </div>
+
+  <!-- Nút xuất Excel ngay dưới tờ báo cáo -->
+  <div style="margin-top:32px;text-align:right;border-top:1px dashed #d1d5db;padding-top:18px">
+    <form method="post" action="{{ url_for('bao_cao_2.xuat_excel_doanh_thu_dich_vu') }}">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+      <input type="hidden" name="tu_ngay" value="{{ tu_ngay }}">
+      <input type="hidden" name="den_ngay" value="{{ den_ngay }}">
+      <input type="hidden" name="ten_cong_ty" value="{{ ten_cong_ty }}">
+      <button class="button button-primary" type="submit" style="padding:10px 24px;font-size:15px">
+        Tải file Excel báo cáo này (.xlsx) <span aria-hidden="true">⬇</span>
+      </button>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
+{% block caption %}Báo cáo thống kê doanh thu — chuẩn định dạng theo mẫu hệ thống khách sạn.{% endblock %}
