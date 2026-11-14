@@ -75,3 +75,34 @@ create table LanSuDungDichVu (
     foreign key (MaDichVu) references DichVu(MaDichVu)
 );
 
+create table DangKyLuuTru (
+    MaDangKy int primary key auto_increment,
+    MaKhachHang int not null,
+    MaChiTietDatPhong int not null,
+    ThoiDiemVao datetime not null,
+    ThoiDiemRa datetime,
+    check (ThoiDiemRa is null or ThoiDiemRa >= ThoiDiemVao),
+    foreign key (MaKhachHang) references KhachHang(MaKhachHang),
+    foreign key (MaChiTietDatPhong)
+        references ChiTietDatPhong(MaChiTietDatPhong)
+);
+
+create table HoaDon (
+    MaHoaDon int primary key auto_increment,
+    MaPhieu int not null unique,
+    MaNhanVienLap int not null,
+    NgayLap date not null,
+    TrangThaiThanhToan varchar(40) not null,
+    TongTien decimal(14,0) not null check (TongTien >= 0),
+    foreign key (MaPhieu) references PhieuDatPhong(MaPhieu),
+    foreign key (MaNhanVienLap) references NhanVien(MaNhanVien)
+);
+
+create table ThanhToan (
+	MaThanhToan int primary key auto_increment,
+    MaPhieu int not null,
+    ThoiDiemGiaoDich datetime not null,
+    LoaiGiaoDich varchar(20) not null,
+    SoTien decimal(14,0) not null check (SoTien >= 0),
+    foreign key (MaPhieu) references PhieuDatPhong(MaPhieu)
+);
