@@ -3,5 +3,3 @@ __pycache__/
 *.pyc
 .qa-tools/
 output/
-tests/
-docs/

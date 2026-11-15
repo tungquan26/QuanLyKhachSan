@@ -62,6 +62,33 @@ def list_service_revenue(start_date, end_date, password):
     )
 
 
+def list_room_type_bookings(start_date, end_date, password):
+    """Count booked rooms by booking date, preserving types with no bookings.
+
+    TrangThaiPhieu is free text in the current schema. Support both Vietnamese
+    spellings of hủy/huỷ and their unaccented equivalents, ignoring case/space.
+    """
+    return run_sql(
+        """
+        SELECT lp.MaLoaiPhong, lp.TenLoaiPhong,
+               COALESCE(bookings.SoLuotDat, 0) AS SoLuotDat
+        FROM LoaiPhong lp
+        LEFT JOIN (
+            SELECT p.MaLoaiPhong, COUNT(ct.MaChiTietDatPhong) AS SoLuotDat
+            FROM ChiTietDatPhong ct
+            JOIN Phong p ON p.MaPhong = ct.MaPhong
+            JOIN PhieuDatPhong pd ON pd.MaPhieu = ct.MaPhieu
+            WHERE pd.NgayDat >= %s AND pd.NgayDat <= %s
+              AND LOWER(TRIM(pd.TrangThaiPhieu)) NOT IN (%s, %s, %s, %s, %s, %s)
+            GROUP BY p.MaLoaiPhong
+        ) bookings ON bookings.MaLoaiPhong = lp.MaLoaiPhong
+        ORDER BY SoLuotDat DESC, lp.MaLoaiPhong ASC
+        """,
+        (start_date, end_date, "đã hủy", "đã huỷ", "hủy", "huỷ", "da huy", "huy"),
+        password, read=True,
+    )
+
+
 def get_guest(record_id, password):
     rows = run_sql(
         "select HoTen, CCCD, SoDienThoai from KhachHang where MaKhachHang = %s",

@@ -279,6 +279,11 @@ input[inputmode=decimal],input[inputmode=numeric] {font-variant-numeric:tabular-
 .report-signatures {display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; padding:28px 24px; text-align:center; color:var(--secondary);}
 .report-signatures p {margin:4px 0; font-size:14px;}
 .report-signatures .report-sign-title {font-weight:600; color:var(--ink);}
+.report-filter-note {margin:0 0 24px; font-size:14px; color:var(--secondary);}
+.report-notes {padding:20px 24px 0; font-size:14px; color:var(--secondary);}
+.report-notes p {margin:0 0 8px;}
+.report-issued-on {padding:20px 24px 0; text-align:right; font-size:14px; color:var(--secondary);}
+.room-report .room-type-name {white-space:normal; min-width:180px; overflow-wrap:anywhere;}
 
 @media(max-width:1150px) {
   :root {--sidebar:240px;}

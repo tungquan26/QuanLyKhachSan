@@ -37,4 +37,6 @@ def create_app(test_config=None):
     app.register_blueprint(pages)
     from bao_cao_2 import bao_cao_2_bp
     app.register_blueprint(bao_cao_2_bp)
+    from bao_cao_loai_phong import room_report_bp
+    app.register_blueprint(room_report_bp)
     return app

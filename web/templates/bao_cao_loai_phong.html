@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% from 'components/forms.html' import csrf, field %}
+{% block title %}Lượt đặt theo loại phòng{% endblock %}
+{% block section_name %}BÁO CÁO THỐNG KÊ{% endblock %}
+{% block heading %}Lượt đặt theo loại phòng{% endblock %}
+{% block description %}Trưởng bộ phận Lễ tân lập báo cáo gửi Ban Giám đốc để theo dõi nhu cầu đặt từng loại phòng và lập kế hoạch kinh doanh.{% endblock %}
+{% block content %}
+<div class="report-layout">
+  <section class="form-panel" aria-labelledby="filter-title">
+    <div class="form-heading"><h2 id="filter-title">Điều kiện báo cáo</h2></div>
+    {% include 'components/notices.html' %}
+    <form method="post" action="{{ url_for('room_report.preview') }}">
+      {{ csrf() }}
+      <div class="report-dates">
+        <div class="field">
+          <label for="tu_ngay">Từ ngày</label>
+          <input id="tu_ngay" name="tu_ngay" type="date" value="{{ values.tu_ngay }}" min="0001-01-01" max="9999-12-31" required>
+        </div>
+        <div class="field">
+          <label for="den_ngay">Đến ngày</label>
+          <input id="den_ngay" name="den_ngay" type="date" value="{{ values.den_ngay }}" min="0001-01-01" max="9999-12-31" required>
+        </div>
+      </div>
+      {{ field('ten_khach_san', 'Tên khách sạn trên báo cáo', values.ten_khach_san, required=true) }}
+      <p class="report-filter-note">Lọc theo ngày đặt, bao gồm cả ngày đầu và ngày cuối kỳ. {{ scope }}</p>
+      <div class="form-actions form-actions-end">
+        <button type="submit" class="button button-primary">Xem báo cáo</button>
+        <button type="submit" class="button" formaction="{{ url_for('room_report.export_excel') }}">Xuất Excel (.xlsx)</button>
+      </div>
+    </form>
+  </section>
+
+  {% if report is not none %}
+  <section class="data-panel report-preview room-report" aria-labelledby="report-title">
+    <div class="table-toolbar">
+      <div>
+        <p class="report-company">{{ values.ten_khach_san }}</p>
+        <h2 id="report-title">{{ title }}</h2>
+        <p class="row-count">{{ period }}</p>
+        <p class="row-count"><strong>Kính gửi:</strong> {{ recipient }}</p>
+      </div>
+    </div>
+    <div class="table-scroll" role="region" aria-label="Lượt đặt theo loại phòng" tabindex="0">
+      <table class="data-table" aria-labelledby="report-title">
+        <thead><tr>
+          <th scope="col">STT</th><th scope="col">Loại phòng</th>
+          <th scope="col" class="numeric">Số lượt đặt</th><th scope="col" class="numeric">Tỷ lệ (%)</th>
+        </tr></thead>
+        <tbody>
+          {% for item in report.rows %}
+          <tr>
+            <td>{{ loop.index }}</td><td class="room-type-name">{{ item.name }}</td>
+            <td class="numeric">{{ format_count(item.count) }}</td><td class="numeric">{{ format_percent(item.share) }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="empty-state">Chưa có danh mục loại phòng.</td></tr>
+          {% endfor %}
+        </tbody>
+        <tfoot><tr>
+          <th scope="row" colspan="2">Tổng cộng</th>
+          <td class="numeric">{{ format_count(report.total) }}</td>
+          <td class="numeric">{{ format_percent(report.total_share) }}</td>
+        </tr></tfoot>
+      </table>
+    </div>
+    <div class="report-notes">
+      {% if report.total == 0 %}<p><strong>Không phát sinh lượt đặt hợp lệ trong kỳ.</strong></p>{% endif %}
+      <p>{{ scope }} {{ method }}</p>
+      <p>{{ ratio_note }}</p>
+    </div>
+    <div class="report-issued-on">{{ issued_on }}</div>
+    <div class="report-signatures">
+      <div>
+        <p class="report-sign-title">Người lập báo cáo</p><p>{{ author_role }}</p>
+        <p>(Ký, ghi rõ họ tên)</p>
+      </div>
+      <div><p class="report-sign-title">Người nhận</p><p>{{ recipient }}</p><p>(Ký, ghi rõ họ tên)</p></div>
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

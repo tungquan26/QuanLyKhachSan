@@ -1,0 +1,89 @@
+erDiagram
+    KhachHang {
+        int MaKhachHang PK
+        varchar HoTen "varchar(100)"
+        varchar CCCD UK "varchar(12)"
+        varchar SoDienThoai "varchar(20)"
+    }
+    NhanVien {
+        int MaNhanVien PK
+        varchar HoTen "varchar(100)"
+        varchar SoDienThoai "varchar(20)"
+        varchar ChucVu "varchar(50)"
+    }
+    LoaiPhong {
+        int MaLoaiPhong PK
+        varchar TenLoaiPhong "varchar(80)"
+        decimal GiaNiemYetMoiDem "decimal(14,0)"
+    }
+    Phong {
+        varchar MaPhong PK "varchar(12)"
+        int MaLoaiPhong FK
+        varchar TinhTrangVanHanh "varchar(40)"
+    }
+    DichVu {
+        int MaDichVu PK
+        varchar TenDichVu "varchar(100)"
+        varchar DonViTinh "varchar(30)"
+        decimal DonGiaHienHanh "decimal(14,0)"
+        varchar TrangThai "varchar(40)"
+    }
+    PhieuDatPhong {
+        int MaPhieu PK
+        int MaKhachHang FK
+        int MaNhanVienTiepNhan FK
+        date NgayDat
+        varchar TrangThaiPhieu "varchar(40)"
+    }
+    ChiTietDatPhong {
+        int MaChiTietDatPhong PK
+        int MaPhieu FK
+        varchar MaPhong FK "varchar(12)"
+        date NgayNhanDuKien
+        date NgayTraDuKien
+        datetime ThoiDiemNhanThucTe
+        datetime ThoiDiemTraThucTe
+        decimal DonGiaPhongApDung "decimal(14,0)"
+    }
+    LanSuDungDichVu {
+        int MaLanSuDung PK
+        int MaChiTietDatPhong FK
+        int MaDichVu FK
+        datetime ThoiDiemSuDung
+        decimal SoLuong "decimal(9,2)"
+        decimal DonGiaApDung "decimal(14,0)"
+    }
+    DangKyLuuTru {
+        int MaDangKy PK
+        int MaKhachHang FK
+        int MaChiTietDatPhong FK
+        datetime ThoiDiemVao
+        datetime ThoiDiemRa
+    }
+    HoaDon {
+        int MaHoaDon PK
+        int MaPhieu UK, FK
+        int MaNhanVienLap FK
+        date NgayLap
+        varchar TrangThaiThanhToan "varchar(40)"
+        decimal TongTien "decimal(14,0)"
+    }
+    ThanhToan {
+        int MaThanhToan PK
+        int MaPhieu FK
+        datetime ThoiDiemGiaoDich
+        varchar LoaiGiaoDich "varchar(20)"
+        decimal SoTien "decimal(14,0)"
+    }
+    LoaiPhong ||--o{ Phong : "MaLoaiPhong"
+    KhachHang ||--o{ PhieuDatPhong : "MaKhachHang"
+    NhanVien ||--o{ PhieuDatPhong : "MaNhanVienTiepNhan"
+    PhieuDatPhong ||--o{ ChiTietDatPhong : "MaPhieu"
+    Phong ||--o{ ChiTietDatPhong : "MaPhong"
+    ChiTietDatPhong ||--o{ LanSuDungDichVu : "MaChiTietDatPhong"
+    DichVu ||--o{ LanSuDungDichVu : "MaDichVu"
+    KhachHang ||--o{ DangKyLuuTru : "MaKhachHang"
+    ChiTietDatPhong ||--o{ DangKyLuuTru : "MaChiTietDatPhong"
+    PhieuDatPhong ||--o| HoaDon : "MaPhieu"
+    NhanVien ||--o{ HoaDon : "MaNhanVienLap"
+    PhieuDatPhong ||--o{ ThanhToan : "MaPhieu"

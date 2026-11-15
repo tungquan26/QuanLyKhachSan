@@ -1,0 +1,293 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1460" viewBox="0 0 1900 1460">
+<rect width="1900" height="1460" fill="#f8fafc"/>
+<style>text{font-family:Arial,sans-serif;fill:#172b46}.field{font-size:14px}.type{font-size:12px;fill:#526078}.key{font-size:11px;font-weight:bold;fill:#1565a7}</style>
+<text x="50" y="48" font-size="28" font-weight="bold">SƠ ĐỒ QUAN HỆ CƠ SỞ DỮ LIỆU KHÁCH SẠN</text>
+<text x="50" y="82" font-size="17">Theo sql/khach-san.sql · 11 bảng · 12 khóa ngoại · PK: khóa chính · FK: khóa ngoại · UK: duy nhất</text>
+<polyline points="1330,205 1430,205" fill="none" stroke="#1565a7" stroke-width="2"/>
+<rect x="1335" y="178" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1355" y="193" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="1385" y="178" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1405" y="193" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="230,296 230,370 450,370 450,430" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="234" y="304" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="254" y="319" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="454" y="400" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="474" y="415" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="640,296 640,430" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="644" y="304" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="664" y="319" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="644" y="400" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="664" y="415" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="820,520 1000,520" fill="none" stroke="#1565a7" stroke-width="2"/>
+<rect x="825" y="493" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="845" y="508" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="955" y="493" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="975" y="508" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="1640,270 1640,370 1330,370 1330,430" fill="none" stroke="#1565a7" stroke-width="2"/>
+<rect x="1644" y="278" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1664" y="293" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="1334" y="400" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1354" y="415" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="1370,700 1370,770 1510,770 1510,850" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="1374" y="708" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1394" y="723" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="1514" y="820" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1534" y="835" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="1660,1180 1660,1068" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="1664" y="1150" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1684" y="1165" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="1664" y="1076" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1684" y="1091" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="50,240 20,240 20,1130 1120,1130 1120,1042" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="5" y="213" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="25" y="228" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="1124" y="1050" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1144" y="1065" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="1150,700 1150,850" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="1154" y="708" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1174" y="723" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="1154" y="820" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="1174" y="835" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="670,622 670,850" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="674" y="630" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="694" y="645" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="674" y="820" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="694" y="835" text-anchor="middle" font-size="13" font-weight="bold">0..1</text>
+<polyline points="870,240 910,240 910,800 840,800 840,850" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="875" y="213" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="895" y="228" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="844" y="820" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="864" y="835" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<polyline points="390,560 340,560 340,760 220,760 220,850" fill="none" stroke="#77859a" stroke-width="2"/>
+<rect x="345" y="533" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="365" y="548" text-anchor="middle" font-size="13" font-weight="bold">1</text>
+<rect x="224" y="820" width="40" height="20" rx="4" fill="#f8fafc"/>
+<text x="244" y="835" text-anchor="middle" font-size="13" font-weight="bold">0..N</text>
+<rect x="50" y="130" width="360" height="166" rx="7" fill="white" stroke="#334760" stroke-width="1.5"/>
+<path d="M57 130 H403 Q410 130 410 137 V173 H50 V137 Q50 130 57 130" fill="#334760"/>
+<text x="64" y="158" font-size="19" font-weight="bold" style="fill:white">KhachHang</text>
+<rect x="51" y="177" width="358" height="26" fill="#f3f6fa"/>
+<text x="60" y="195" class="key">PK</text>
+<text x="112" y="195" class="field">MaKhachHang</text>
+<text x="398" y="195" text-anchor="end" class="type">int</text>
+<text x="60" y="221" class="key"></text>
+<text x="112" y="221" class="field">HoTen</text>
+<text x="398" y="221" text-anchor="end" class="type">varchar(100)</text>
+<rect x="51" y="229" width="358" height="26" fill="#f3f6fa"/>
+<text x="60" y="247" class="key">UK</text>
+<text x="112" y="247" class="field">CCCD</text>
+<text x="398" y="247" text-anchor="end" class="type">varchar(12)</text>
+<text x="60" y="273" class="key"></text>
+<text x="112" y="273" class="field">SoDienThoai</text>
+<text x="398" y="273" text-anchor="end" class="type">varchar(20)</text>
+<rect x="510" y="130" width="360" height="166" rx="7" fill="white" stroke="#334760" stroke-width="1.5"/>
+<path d="M517 130 H863 Q870 130 870 137 V173 H510 V137 Q510 130 517 130" fill="#334760"/>
+<text x="524" y="158" font-size="19" font-weight="bold" style="fill:white">NhanVien</text>
+<rect x="511" y="177" width="358" height="26" fill="#f3f6fa"/>
+<text x="520" y="195" class="key">PK</text>
+<text x="572" y="195" class="field">MaNhanVien</text>
+<text x="858" y="195" text-anchor="end" class="type">int</text>
+<text x="520" y="221" class="key"></text>
+<text x="572" y="221" class="field">HoTen</text>
+<text x="858" y="221" text-anchor="end" class="type">varchar(100)</text>
+<rect x="511" y="229" width="358" height="26" fill="#f3f6fa"/>
+<text x="520" y="247" class="key"></text>
+<text x="572" y="247" class="field">SoDienThoai</text>
+<text x="858" y="247" text-anchor="end" class="type">varchar(20)</text>
+<text x="520" y="273" class="key"></text>
+<text x="572" y="273" class="field">ChucVu</text>
+<text x="858" y="273" text-anchor="end" class="type">varchar(50)</text>
+<rect x="970" y="130" width="360" height="140" rx="7" fill="white" stroke="#1565a7" stroke-width="1.5"/>
+<path d="M977 130 H1323 Q1330 130 1330 137 V173 H970 V137 Q970 130 977 130" fill="#1565a7"/>
+<text x="984" y="158" font-size="19" font-weight="bold" style="fill:white">LoaiPhong</text>
+<rect x="971" y="177" width="358" height="26" fill="#f3f6fa"/>
+<text x="980" y="195" class="key">PK</text>
+<text x="1032" y="195" class="field">MaLoaiPhong</text>
+<text x="1318" y="195" text-anchor="end" class="type">int</text>
+<text x="980" y="221" class="key"></text>
+<text x="1032" y="221" class="field">TenLoaiPhong</text>
+<text x="1318" y="221" text-anchor="end" class="type">varchar(80)</text>
+<rect x="971" y="229" width="358" height="26" fill="#f3f6fa"/>
+<text x="980" y="247" class="key"></text>
+<text x="1032" y="247" class="field">GiaNiemYetMoiDem</text>
+<text x="1318" y="247" text-anchor="end" class="type">decimal(14,0)</text>
+<rect x="1430" y="130" width="410" height="140" rx="7" fill="white" stroke="#1565a7" stroke-width="1.5"/>
+<path d="M1437 130 H1833 Q1840 130 1840 137 V173 H1430 V137 Q1430 130 1437 130" fill="#1565a7"/>
+<text x="1444" y="158" font-size="19" font-weight="bold" style="fill:white">Phong</text>
+<rect x="1431" y="177" width="408" height="26" fill="#f3f6fa"/>
+<text x="1440" y="195" class="key">PK</text>
+<text x="1492" y="195" class="field">MaPhong</text>
+<text x="1828" y="195" text-anchor="end" class="type">varchar(12)</text>
+<text x="1440" y="221" class="key">FK</text>
+<text x="1492" y="221" class="field">MaLoaiPhong</text>
+<text x="1828" y="221" text-anchor="end" class="type">int</text>
+<rect x="1431" y="229" width="408" height="26" fill="#f3f6fa"/>
+<text x="1440" y="247" class="key"></text>
+<text x="1492" y="247" class="field">TinhTrangVanHanh</text>
+<text x="1828" y="247" text-anchor="end" class="type">varchar(40)</text>
+<rect x="1460" y="1180" width="380" height="192" rx="7" fill="white" stroke="#334760" stroke-width="1.5"/>
+<path d="M1467 1180 H1833 Q1840 1180 1840 1187 V1223 H1460 V1187 Q1460 1180 1467 1180" fill="#334760"/>
+<text x="1474" y="1208" font-size="19" font-weight="bold" style="fill:white">DichVu</text>
+<rect x="1461" y="1227" width="378" height="26" fill="#f3f6fa"/>
+<text x="1470" y="1245" class="key">PK</text>
+<text x="1522" y="1245" class="field">MaDichVu</text>
+<text x="1828" y="1245" text-anchor="end" class="type">int</text>
+<text x="1470" y="1271" class="key"></text>
+<text x="1522" y="1271" class="field">TenDichVu</text>
+<text x="1828" y="1271" text-anchor="end" class="type">varchar(100)</text>
+<rect x="1461" y="1279" width="378" height="26" fill="#f3f6fa"/>
+<text x="1470" y="1297" class="key"></text>
+<text x="1522" y="1297" class="field">DonViTinh</text>
+<text x="1828" y="1297" text-anchor="end" class="type">varchar(30)</text>
+<text x="1470" y="1323" class="key"></text>
+<text x="1522" y="1323" class="field">DonGiaHienHanh</text>
+<text x="1828" y="1323" text-anchor="end" class="type">decimal(14,0)</text>
+<rect x="1461" y="1331" width="378" height="26" fill="#f3f6fa"/>
+<text x="1470" y="1349" class="key"></text>
+<text x="1522" y="1349" class="field">TrangThai</text>
+<text x="1828" y="1349" text-anchor="end" class="type">varchar(40)</text>
+<rect x="390" y="430" width="430" height="192" rx="7" fill="white" stroke="#1565a7" stroke-width="1.5"/>
+<path d="M397 430 H813 Q820 430 820 437 V473 H390 V437 Q390 430 397 430" fill="#1565a7"/>
+<text x="404" y="458" font-size="19" font-weight="bold" style="fill:white">PhieuDatPhong</text>
+<rect x="391" y="477" width="428" height="26" fill="#f3f6fa"/>
+<text x="400" y="495" class="key">PK</text>
+<text x="452" y="495" class="field">MaPhieu</text>
+<text x="808" y="495" text-anchor="end" class="type">int</text>
+<text x="400" y="521" class="key">FK</text>
+<text x="452" y="521" class="field">MaKhachHang</text>
+<text x="808" y="521" text-anchor="end" class="type">int</text>
+<rect x="391" y="529" width="428" height="26" fill="#f3f6fa"/>
+<text x="400" y="547" class="key">FK</text>
+<text x="452" y="547" class="field">MaNhanVienTiepNhan</text>
+<text x="808" y="547" text-anchor="end" class="type">int</text>
+<text x="400" y="573" class="key"></text>
+<text x="452" y="573" class="field">NgayDat</text>
+<text x="808" y="573" text-anchor="end" class="type">date</text>
+<rect x="391" y="581" width="428" height="26" fill="#f3f6fa"/>
+<text x="400" y="599" class="key"></text>
+<text x="452" y="599" class="field">TrangThaiPhieu</text>
+<text x="808" y="599" text-anchor="end" class="type">varchar(40)</text>
+<rect x="1000" y="430" width="470" height="270" rx="7" fill="white" stroke="#1565a7" stroke-width="1.5"/>
+<path d="M1007 430 H1463 Q1470 430 1470 437 V473 H1000 V437 Q1000 430 1007 430" fill="#1565a7"/>
+<text x="1014" y="458" font-size="19" font-weight="bold" style="fill:white">ChiTietDatPhong</text>
+<rect x="1001" y="477" width="468" height="26" fill="#f3f6fa"/>
+<text x="1010" y="495" class="key">PK</text>
+<text x="1062" y="495" class="field">MaChiTietDatPhong</text>
+<text x="1458" y="495" text-anchor="end" class="type">int</text>
+<text x="1010" y="521" class="key">FK</text>
+<text x="1062" y="521" class="field">MaPhieu</text>
+<text x="1458" y="521" text-anchor="end" class="type">int</text>
+<rect x="1001" y="529" width="468" height="26" fill="#f3f6fa"/>
+<text x="1010" y="547" class="key">FK</text>
+<text x="1062" y="547" class="field">MaPhong</text>
+<text x="1458" y="547" text-anchor="end" class="type">varchar(12)</text>
+<text x="1010" y="573" class="key"></text>
+<text x="1062" y="573" class="field">NgayNhanDuKien</text>
+<text x="1458" y="573" text-anchor="end" class="type">date</text>
+<rect x="1001" y="581" width="468" height="26" fill="#f3f6fa"/>
+<text x="1010" y="599" class="key"></text>
+<text x="1062" y="599" class="field">NgayTraDuKien</text>
+<text x="1458" y="599" text-anchor="end" class="type">date</text>
+<text x="1010" y="625" class="key"></text>
+<text x="1062" y="625" class="field">ThoiDiemNhanThucTe</text>
+<text x="1458" y="625" text-anchor="end" class="type">datetime</text>
+<rect x="1001" y="633" width="468" height="26" fill="#f3f6fa"/>
+<text x="1010" y="651" class="key"></text>
+<text x="1062" y="651" class="field">ThoiDiemTraThucTe</text>
+<text x="1458" y="651" text-anchor="end" class="type">datetime</text>
+<text x="1010" y="677" class="key"></text>
+<text x="1062" y="677" class="field">DonGiaPhongApDung</text>
+<text x="1458" y="677" text-anchor="end" class="type">decimal(14,0)</text>
+<rect x="1420" y="850" width="420" height="218" rx="7" fill="white" stroke="#334760" stroke-width="1.5"/>
+<path d="M1427 850 H1833 Q1840 850 1840 857 V893 H1420 V857 Q1420 850 1427 850" fill="#334760"/>
+<text x="1434" y="878" font-size="19" font-weight="bold" style="fill:white">LanSuDungDichVu</text>
+<rect x="1421" y="897" width="418" height="26" fill="#f3f6fa"/>
+<text x="1430" y="915" class="key">PK</text>
+<text x="1482" y="915" class="field">MaLanSuDung</text>
+<text x="1828" y="915" text-anchor="end" class="type">int</text>
+<text x="1430" y="941" class="key">FK</text>
+<text x="1482" y="941" class="field">MaChiTietDatPhong</text>
+<text x="1828" y="941" text-anchor="end" class="type">int</text>
+<rect x="1421" y="949" width="418" height="26" fill="#f3f6fa"/>
+<text x="1430" y="967" class="key">FK</text>
+<text x="1482" y="967" class="field">MaDichVu</text>
+<text x="1828" y="967" text-anchor="end" class="type">int</text>
+<text x="1430" y="993" class="key"></text>
+<text x="1482" y="993" class="field">ThoiDiemSuDung</text>
+<text x="1828" y="993" text-anchor="end" class="type">datetime</text>
+<rect x="1421" y="1001" width="418" height="26" fill="#f3f6fa"/>
+<text x="1430" y="1019" class="key"></text>
+<text x="1482" y="1019" class="field">SoLuong</text>
+<text x="1828" y="1019" text-anchor="end" class="type">decimal(9,2)</text>
+<text x="1430" y="1045" class="key"></text>
+<text x="1482" y="1045" class="field">DonGiaApDung</text>
+<text x="1828" y="1045" text-anchor="end" class="type">decimal(14,0)</text>
+<rect x="940" y="850" width="430" height="192" rx="7" fill="white" stroke="#334760" stroke-width="1.5"/>
+<path d="M947 850 H1363 Q1370 850 1370 857 V893 H940 V857 Q940 850 947 850" fill="#334760"/>
+<text x="954" y="878" font-size="19" font-weight="bold" style="fill:white">DangKyLuuTru</text>
+<rect x="941" y="897" width="428" height="26" fill="#f3f6fa"/>
+<text x="950" y="915" class="key">PK</text>
+<text x="1002" y="915" class="field">MaDangKy</text>
+<text x="1358" y="915" text-anchor="end" class="type">int</text>
+<text x="950" y="941" class="key">FK</text>
+<text x="1002" y="941" class="field">MaKhachHang</text>
+<text x="1358" y="941" text-anchor="end" class="type">int</text>
+<rect x="941" y="949" width="428" height="26" fill="#f3f6fa"/>
+<text x="950" y="967" class="key">FK</text>
+<text x="1002" y="967" class="field">MaChiTietDatPhong</text>
+<text x="1358" y="967" text-anchor="end" class="type">int</text>
+<text x="950" y="993" class="key"></text>
+<text x="1002" y="993" class="field">ThoiDiemVao</text>
+<text x="1358" y="993" text-anchor="end" class="type">datetime</text>
+<rect x="941" y="1001" width="428" height="26" fill="#f3f6fa"/>
+<text x="950" y="1019" class="key"></text>
+<text x="1002" y="1019" class="field">ThoiDiemRa</text>
+<text x="1358" y="1019" text-anchor="end" class="type">datetime</text>
+<rect x="460" y="850" width="420" height="218" rx="7" fill="white" stroke="#334760" stroke-width="1.5"/>
+<path d="M467 850 H873 Q880 850 880 857 V893 H460 V857 Q460 850 467 850" fill="#334760"/>
+<text x="474" y="878" font-size="19" font-weight="bold" style="fill:white">HoaDon</text>
+<rect x="461" y="897" width="418" height="26" fill="#f3f6fa"/>
+<text x="470" y="915" class="key">PK</text>
+<text x="522" y="915" class="field">MaHoaDon</text>
+<text x="868" y="915" text-anchor="end" class="type">int</text>
+<text x="470" y="941" class="key">UK/FK</text>
+<text x="522" y="941" class="field">MaPhieu</text>
+<text x="868" y="941" text-anchor="end" class="type">int</text>
+<rect x="461" y="949" width="418" height="26" fill="#f3f6fa"/>
+<text x="470" y="967" class="key">FK</text>
+<text x="522" y="967" class="field">MaNhanVienLap</text>
+<text x="868" y="967" text-anchor="end" class="type">int</text>
+<text x="470" y="993" class="key"></text>
+<text x="522" y="993" class="field">NgayLap</text>
+<text x="868" y="993" text-anchor="end" class="type">date</text>
+<rect x="461" y="1001" width="418" height="26" fill="#f3f6fa"/>
+<text x="470" y="1019" class="key"></text>
+<text x="522" y="1019" class="field">TrangThaiThanhToan</text>
+<text x="868" y="1019" text-anchor="end" class="type">varchar(40)</text>
+<text x="470" y="1045" class="key"></text>
+<text x="522" y="1045" class="field">TongTien</text>
+<text x="868" y="1045" text-anchor="end" class="type">decimal(14,0)</text>
+<rect x="50" y="850" width="350" height="192" rx="7" fill="white" stroke="#334760" stroke-width="1.5"/>
+<path d="M57 850 H393 Q400 850 400 857 V893 H50 V857 Q50 850 57 850" fill="#334760"/>
+<text x="64" y="878" font-size="19" font-weight="bold" style="fill:white">ThanhToan</text>
+<rect x="51" y="897" width="348" height="26" fill="#f3f6fa"/>
+<text x="60" y="915" class="key">PK</text>
+<text x="112" y="915" class="field">MaThanhToan</text>
+<text x="388" y="915" text-anchor="end" class="type">int</text>
+<text x="60" y="941" class="key">FK</text>
+<text x="112" y="941" class="field">MaPhieu</text>
+<text x="388" y="941" text-anchor="end" class="type">int</text>
+<rect x="51" y="949" width="348" height="26" fill="#f3f6fa"/>
+<text x="60" y="967" class="key"></text>
+<text x="112" y="967" class="field">ThoiDiemGiaoDich</text>
+<text x="388" y="967" text-anchor="end" class="type">datetime</text>
+<text x="60" y="993" class="key"></text>
+<text x="112" y="993" class="field">LoaiGiaoDich</text>
+<text x="388" y="993" text-anchor="end" class="type">varchar(20)</text>
+<rect x="51" y="1001" width="348" height="26" fill="#f3f6fa"/>
+<text x="60" y="1019" class="key"></text>
+<text x="112" y="1019" class="field">SoTien</text>
+<text x="388" y="1019" text-anchor="end" class="type">decimal(14,0)</text>
+<text x="50" y="1380" font-size="17">Các bảng màu xanh tham gia báo cáo lượt đặt theo loại phòng.</text>
+<text x="50" y="1412" font-size="16">Mỗi bản ghi con thuộc đúng 1 bản ghi cha. Một phiếu có tối đa 1 hóa đơn vì HoaDon.MaPhieu có UNIQUE.</text>
+</svg>
