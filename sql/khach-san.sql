@@ -1,106 +1,107 @@
 create database hotel;
 use hotel;
+set names utf8mb4;
 
-create table KhachHang (
-    MaKhachHang int primary key auto_increment,
-    HoTen varchar(100) not null,
-    CCCD varchar(12) not null unique,
-    SoDienThoai varchar(20)
+create table khachhang (
+    makhachhang int primary key auto_increment,
+    hoten varchar(100) not null,
+    cccd varchar(12) not null unique,
+    sodienthoai varchar(20)
 );
 
-create table NhanVien (
-    MaNhanVien int primary key auto_increment,
-    HoTen varchar(100) not null,
-    SoDienThoai varchar(20),
-    ChucVu varchar(50) not null
+create table nhanvien (
+    manhanvien int primary key auto_increment,
+    hoten varchar(100) not null,
+    sodienthoai varchar(20),
+    chucvu varchar(50) not null
 );
 
-create table LoaiPhong (
-    MaLoaiPhong int primary key auto_increment,
-    TenLoaiPhong varchar(80) not null,
-    GiaNiemYetMoiDem decimal(14,0) not null check (GiaNiemYetMoiDem >= 0)
+create table loaiphong (
+    maloaiphong int primary key auto_increment,
+    tenloaiphong varchar(80) not null unique,
+    gianiemyetmoidem decimal(14,0) not null check (gianiemyetmoidem >= 0)
 );
 
-create table Phong (
-    MaPhong varchar(12) primary key,
-    MaLoaiPhong int not null,
-    TinhTrangVanHanh varchar(40) not null,
-    foreign key (MaLoaiPhong) references LoaiPhong(MaLoaiPhong)
+create table phong (
+    maphong varchar(12) primary key,
+    maloaiphong int not null,
+    tinhtrangvanhanh varchar(40) not null,
+    foreign key (maloaiphong) references loaiphong(maloaiphong)
 );
 
-create table DichVu (
-    MaDichVu int primary key auto_increment,
-    TenDichVu varchar(100) not null,
-    DonViTinh varchar(30) not null,
-    DonGiaHienHanh decimal(14,0) not null check (DonGiaHienHanh >= 0),
-    TrangThai varchar(40) not null
+create table dichvu (
+    madichvu int primary key auto_increment,
+    tendichvu varchar(100) not null unique,
+    donvitinh varchar(30) not null,
+    dongiahienhanh decimal(14,0) not null check (dongiahienhanh >= 0),
+    trangthai varchar(40) not null
 );
 
-create table PhieuDatPhong (
-    MaPhieu int primary key auto_increment,
-    MaKhachHang int not null,
-    MaNhanVienTiepNhan int not null,
-    NgayDat date not null,
-    TrangThaiPhieu varchar(40) not null,
-    foreign key (MaKhachHang) references KhachHang(MaKhachHang),
-    foreign key (MaNhanVienTiepNhan) references NhanVien(MaNhanVien)
+create table phieudatphong (
+    maphieu int primary key auto_increment,
+    makhachhang int not null,
+    manhanvientiepnhan int not null,
+    ngaydat date not null,
+    trangthaiphieu varchar(40) not null,
+    foreign key (makhachhang) references khachhang(makhachhang),
+    foreign key (manhanvientiepnhan) references nhanvien(manhanvien)
 );
 
-create table ChiTietDatPhong (
-    MaChiTietDatPhong int primary key auto_increment,
-    MaPhieu int not null,
-    MaPhong varchar(12) not null,
-    NgayNhanDuKien date not null,
-    NgayTraDuKien date not null,
-    ThoiDiemNhanThucTe datetime,
-    ThoiDiemTraThucTe datetime,
-    DonGiaPhongApDung decimal(14,0) not null check (DonGiaPhongApDung >= 0),
-    check (NgayTraDuKien > NgayNhanDuKien),
-    check (ThoiDiemTraThucTe is null or
-          (ThoiDiemNhanThucTe is not null and ThoiDiemTraThucTe >= ThoiDiemNhanThucTe)),
-    foreign key (MaPhieu) references PhieuDatPhong(MaPhieu),
-    foreign key (MaPhong) references Phong(MaPhong)
+create table chitietdatphong (
+    machitietdatphong int primary key auto_increment,
+    maphieu int not null,
+    maphong varchar(12) not null,
+    ngaynhandukien date not null,
+    ngaytradukien date not null,
+    thoidiemnhanthucte datetime,
+    thoidiemtrathucte datetime,
+    dongiaphongapdung decimal(14,0) not null check (dongiaphongapdung >= 0),
+    check (ngaytradukien > ngaynhandukien),
+    check (thoidiemtrathucte is null or
+          (thoidiemnhanthucte is not null and thoidiemtrathucte >= thoidiemnhanthucte)),
+    foreign key (maphieu) references phieudatphong(maphieu),
+    foreign key (maphong) references phong(maphong)
 );
 
-create table LanSuDungDichVu (
-    MaLanSuDung int primary key auto_increment,
-    MaChiTietDatPhong int not null,
-    MaDichVu int not null,
-    ThoiDiemSuDung datetime not null,
-    SoLuong decimal(9,2) not null check (SoLuong > 0),
-    DonGiaApDung decimal(14,0) not null check (DonGiaApDung >= 0),
-    foreign key (MaChiTietDatPhong) references ChiTietDatPhong(MaChiTietDatPhong),
-    foreign key (MaDichVu) references DichVu(MaDichVu)
+create table lansudungdichvu (
+    malansudung int primary key auto_increment,
+    machitietdatphong int not null,
+    madichvu int not null,
+    thoidiemsudung datetime not null,
+    soluong decimal(9,2) not null check (soluong > 0),
+    dongiaapdung decimal(14,0) not null check (dongiaapdung >= 0),
+    foreign key (machitietdatphong) references chitietdatphong(machitietdatphong),
+    foreign key (madichvu) references dichvu(madichvu)
 );
 
-create table DangKyLuuTru (
-    MaDangKy int primary key auto_increment,
-    MaKhachHang int not null,
-    MaChiTietDatPhong int not null,
-    ThoiDiemVao datetime not null,
-    ThoiDiemRa datetime,
-    check (ThoiDiemRa is null or ThoiDiemRa >= ThoiDiemVao),
-    foreign key (MaKhachHang) references KhachHang(MaKhachHang),
-    foreign key (MaChiTietDatPhong)
-        references ChiTietDatPhong(MaChiTietDatPhong)
+create table dangkyluutru (
+    madangky int primary key auto_increment,
+    makhachhang int not null,
+    machitietdatphong int not null,
+    thoidiemvao datetime not null,
+    thoidiemra datetime,
+    check (thoidiemra is null or thoidiemra >= thoidiemvao),
+    foreign key (makhachhang) references khachhang(makhachhang),
+    foreign key (machitietdatphong)
+        references chitietdatphong(machitietdatphong)
 );
 
-create table HoaDon (
-    MaHoaDon int primary key auto_increment,
-    MaPhieu int not null unique,
-    MaNhanVienLap int not null,
-    NgayLap date not null,
-    TrangThaiThanhToan varchar(40) not null,
-    TongTien decimal(14,0) not null check (TongTien >= 0),
-    foreign key (MaPhieu) references PhieuDatPhong(MaPhieu),
-    foreign key (MaNhanVienLap) references NhanVien(MaNhanVien)
+create table hoadon (
+    mahoadon int primary key auto_increment,
+    maphieu int not null unique,
+    manhanvienlap int not null,
+    ngaylap date not null,
+    trangthaithanhtoan varchar(40) not null,
+    tongtien decimal(14,0) not null check (tongtien >= 0),
+    foreign key (maphieu) references phieudatphong(maphieu),
+    foreign key (manhanvienlap) references nhanvien(manhanvien)
 );
 
-create table ThanhToan (
-	MaThanhToan int primary key auto_increment,
-    MaPhieu int not null,
-    ThoiDiemGiaoDich datetime not null,
-    LoaiGiaoDich varchar(20) not null,
-    SoTien decimal(14,0) not null check (SoTien >= 0),
-    foreign key (MaPhieu) references PhieuDatPhong(MaPhieu)
+create table thanhtoan (
+	mathanhtoan int primary key auto_increment,
+    maphieu int not null,
+    thoidiemgiaodich datetime not null,
+    loaigiaodich varchar(20) not null,
+    sotien decimal(14,0) not null check (sotien >= 0),
+    foreign key (maphieu) references phieudatphong(maphieu)
 );

@@ -17,10 +17,21 @@ document.querySelectorAll('[data-entry-form]').forEach(form => {
     if (form.dataset.submitting) { event.preventDefault(); return; }
     form.dataset.submitting = 'true';
     form.setAttribute('aria-busy', 'true');
-    // Keep the submitter's name/value in the POST when showing progress.
+
     if (event.submitter) {
       event.submitter.textContent = 'Đang xử lý…';
       event.submitter.setAttribute('aria-disabled', 'true');
+    }
+  });
+});
+document.querySelectorAll('.cccd-filter').forEach(filter => {
+  filter.addEventListener('toggle', () => {
+    if (filter.open) filter.querySelector('input').focus();
+  });
+  filter.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      filter.open = false;
+      filter.querySelector('summary').focus();
     }
   });
 });

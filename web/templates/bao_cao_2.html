@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% from 'components/forms.html' import csrf, field %}
+{% from 'components/forms.html' import csrf %}
 {% block title %}Doanh thu dịch vụ{% endblock %}
 {% block section_name %}BÁO CÁO THỐNG KÊ{% endblock %}
 {% block heading %}Doanh thu dịch vụ{% endblock %}
@@ -21,7 +21,6 @@
           <input id="den_ngay" name="den_ngay" type="date" value="{{ den_ngay }}" min="0001-01-01" max="9999-12-31" required>
         </div>
       </div>
-      {{ field('ten_cong_ty', 'Tên đơn vị trên báo cáo', ten_cong_ty, required=true) }}
       <div class="form-actions form-actions-end">
         <button type="submit" class="button button-primary">Xem báo cáo</button>
         <button type="submit" class="button" formaction="{{ url_for('bao_cao_2.xuat_excel_doanh_thu_dich_vu') }}">Xuất Excel (.xlsx)</button>
@@ -33,7 +32,6 @@
   <section class="data-panel report-preview" aria-labelledby="report-title">
     <div class="table-toolbar">
       <div>
-        <p class="report-company">{{ ten_cong_ty }}</p>
         <h2 id="report-title">Báo cáo thống kê doanh thu dịch vụ</h2>
         <p class="row-count">Từ ngày {{ tu_ngay[8:10] }}/{{ tu_ngay[5:7] }}/{{ tu_ngay[:4] }} đến ngày {{ den_ngay[8:10] }}/{{ den_ngay[5:7] }}/{{ den_ngay[:4] }}</p>
       </div>

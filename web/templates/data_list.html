@@ -1,33 +1,43 @@
 {% extends 'base.html' %}
+{% macro search_icon() %}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>{% endmacro %}
 {% block title %}{{ list_title }}{% endblock %}
 {% block heading %}{{ list_title }}{% endblock %}
 {% block section_name %}DANH SÁCH DỮ LIỆU{% endblock %}
-{% block description %}Dữ liệu thêm trước ở trên, thêm sau ở cuối danh sách. STT tăng dần từ 1.{% endblock %}
+{% block description %}{% if search_cccd %}Bấm kính lúp ở cột CCCD để tìm khách hàng theo số căn cước công dân. {% endif %}Nhấn F5 để tải lại dữ liệu.{% endblock %}
 {% block content %}
   {% include 'components/notices.html' %}
   <section class="data-panel" aria-labelledby="table-title">
     <div class="table-toolbar">
-      <div><h2 id="table-title">{{ table_name }}</h2>{% if rows is not none %}<p class="row-count">{{ rows|length }} bản ghi</p>{% endif %}</div>
-      <div class="table-actions">
-        <a class="button" href="{{ url_for('pages.' + active) }}">Làm mới</a>
-        <a class="button button-primary" href="{{ url_for('pages.' + create_endpoint) }}">{{ create_label }}</a>
-      </div>
+      <div><h2 id="table-title">{{ table_name }}</h2>{% if rows is not none %}<p class="row-count">{{ rows|length }} {{ 'kết quả' if keyword else 'bản ghi' }}</p>{% endif %}</div>
     </div>
     {% if rows is not none %}
     <div class="table-scroll" role="region" aria-label="{{ list_title }}" tabindex="0">
       <table class="data-table" aria-labelledby="table-title">
-        <thead><tr>{% for column in columns %}<th scope="col">{{ column }}</th>{% endfor %}<th scope="col">Thao tác</th></tr></thead>
+        <thead><tr>{% for column in columns %}<th scope="col">
+          {% if search_cccd and column == 'CCCD' %}
+          <details class="cccd-filter" {% if keyword %}open{% endif %}>
+            <summary title="Tra cứu theo CCCD" aria-label="Tra cứu theo CCCD"><span>CCCD</span>{{ search_icon() }}</summary>
+            <form method="get" action="{{ url_for('pages.guest_list') }}" role="search" aria-label="Tìm khách hàng theo CCCD">
+              <div class="cccd-search-input">
+                <input type="search" name="q" value="{{ keyword }}" inputmode="numeric" maxlength="12" placeholder="Nhập số CCCD" aria-label="Số CCCD">
+                <button type="submit" class="cccd-search-submit" aria-label="Tìm theo CCCD" title="Tìm theo CCCD">{{ search_icon() }}</button>
+              </div>
+              {% if keyword %}<a class="clear-cccd-filter" href="{{ url_for('pages.guest_list') }}">Xóa lọc</a>{% endif %}
+            </form>
+          </details>
+          {% else %}{{ column }}{% endif %}
+        </th>{% endfor %}</tr></thead>
         <tbody>
           {% for row in rows %}
-          <tr><td>{{ loop.index }}</td>{% for value in row[1:] %}<td{% if value is none %} class="null-value"{% endif %}>{{ 'NULL' if value is none else value }}</td>{% endfor %}<td><a class="button" href="{{ url_for('pages.edit_guest' if active == 'guest_list' else 'pages.edit_service', record_id=row[0]) }}" aria-label="Sửa {{ row[1] }}">Sửa</a></td></tr>
+          <tr><td>{{ loop.index }}</td>{% for value in row[1:] %}<td{% if value is none %} class="null-value"{% endif %}>{{ 'NULL' if value is none else value }}</td>{% endfor %}</tr>
           {% else %}
-          <tr><td class="empty-state" colspan="{{ columns|length + 1 }}">Chưa có dữ liệu.</td></tr>
+          <tr><td class="empty-state" colspan="{{ columns|length }}">{{ 'Không tìm thấy khách hàng có CCCD phù hợp. Hãy thử số CCCD khác hoặc xóa lọc để xem toàn bộ danh sách.' if keyword else 'Chưa có dữ liệu.' }}</td></tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
     {% else %}
-    <p class="table-unavailable">Không tải được dữ liệu. Chọn Làm mới để thử lại.</p>
+    <p class="table-unavailable">Không tải được dữ liệu. Nhấn F5 để thử lại.</p>
     {% endif %}
   </section>
 {% endblock %}

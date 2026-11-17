@@ -5,6 +5,32 @@ from . import validation
 
 pages = Blueprint("pages", __name__)
 
+@pages.route("/bao-cao/su-dung-loai-phong", methods=["GET", "POST"])
+@pages.post("/bao-cao/su-dung-loai-phong/xuat-excel", endpoint="export_room_type_usage", defaults={"export": True})
+def room_type_usage(export=False):
+    from datetime import datetime, timedelta, timezone
+
+    today = datetime.now(timezone(timedelta(hours=7))).date()
+    values = {"tu_ngay": str(today.replace(day=1)), "den_ngay": str(today)}
+    rows = None
+    status = 200
+    if request.method == "POST":
+        values = {key: request.form.get(key, "").strip() for key in values}
+        try:
+            start, end = validation.report_dates(values)
+            rows = database.list_room_type_usage(start, end, password())
+        except (ValueError, Error) as error:
+            notify_error(error)
+            status = 400 if isinstance(error, ValueError) else 503
+    if export and status == 200 and rows is not None:
+        from .room_report import export_excel
+        return export_excel(rows, values, today)
+    return render_template(
+        "room_type_usage.html", active="room_type_usage", **values, rows=rows,
+        total_uses=sum(row[2] for row in rows or []),
+        total_rooms=sum(row[3] for row in rows or []),
+        ngay_in=f"Ngày {today.day:02d} tháng {today.month:02d} năm {today.year}",
+    ), status
 
 def password():
     value = current_app.config["MYSQL_PASSWORD"]
@@ -12,12 +38,11 @@ def password():
         raise ValueError("Chưa cấu hình kết nối. Hãy chạy python app.py và nhập mật khẩu MySQL trong terminal.")
     return value
 
-
-def notify_error(error):
+def notify_error(error, *, duplicate_message="CCCD bị trùng, đã có trong hệ thống."):
     if isinstance(error, ValueError):
         message = str(error)
     elif error.errno == 1062:
-        message = "CCCD bị trùng, đã có trong hệ thống."
+        message = duplicate_message
     elif error.errno == 1644:
         message = error.msg
     else:
@@ -37,116 +62,74 @@ def notify_error(error):
         current_app.logger.error("MySQL operation failed: errno=%s sqlstate=%s", error.errno, error.sqlstate)
     flash(message, "error")
 
-
 @pages.get("/")
 def index():
     return redirect(url_for("pages.guests"))
 
-
-def data_list(fetch_rows, *, active, title, columns, table_name, create_endpoint, create_label):
+def data_list(fetch_rows, *, active, title, columns, table_name, search_cccd=False):
+    keyword = request.args.get("q", "").strip() if search_cccd else ""
     rows = None
     status = 200
     try:
-        rows = fetch_rows(password())
+        rows = fetch_rows(password(), keyword=keyword) if search_cccd else fetch_rows(password())
     except (ValueError, Error) as error:
         notify_error(error)
         status = 503
     return render_template(
         "data_list.html", active=active, list_title=title, columns=columns,
-        table_name=table_name, rows=rows, create_endpoint=create_endpoint,
-        create_label=create_label,
+        table_name=table_name, rows=rows, keyword=keyword, search_cccd=search_cccd,
     ), status
-
 
 @pages.get("/danh-sach/khach-hang")
 def guest_list():
     return data_list(
         database.list_guests, active="guest_list", title="Danh sách khách hàng",
         columns=("STT", "HoTen", "CCCD", "SoDienThoai"),
-        table_name="KhachHang", create_endpoint="guests", create_label="Thêm khách hàng",
+        table_name="KhachHang", search_cccd=True,
     )
-
 
 @pages.get("/danh-sach/dich-vu")
 def service_list():
     return data_list(
         database.list_services, active="service_list", title="Danh sách dịch vụ",
         columns=("STT", "TenDichVu", "DonViTinh", "DonGiaHienHanh", "TrangThai"),
-        table_name="DichVu", create_endpoint="services", create_label="Thêm dịch vụ",
+        table_name="DichVu",
     )
 
-
-@pages.route("/khach-hang/<int:record_id>/sua", methods=["GET", "POST"], endpoint="edit_guest")
 @pages.route("/khach-hang", methods=["GET", "POST"])
-def guests(record_id=None):
+def guests():
     values = {key: request.form.get(key, "").strip() for key in ("name", "cccd", "phone")}
     status = 200
-    if record_id is not None and request.method == "GET":
-        try:
-            row = database.get_guest(record_id, password())
-            values = dict(zip(("name", "cccd", "phone"), ("" if v is None else str(v) for v in row)))
-        except database.RecordNotFound:
-            flash("Khách hàng không còn tồn tại. Hãy chọn lại từ danh sách.", "error")
-            return redirect(url_for("pages.guest_list"), code=303)
-        except (ValueError, Error) as error:
-            notify_error(error)
-            return redirect(url_for("pages.guest_list"), code=303)
     if request.method == "POST":
         try:
             action = request.form.get("action")
             if action == "save":
                 validation.guest(values)
-                if record_id is not None:
-                    database.update_guest(record_id, values["name"], values["cccd"], values["phone"], password())
-                    flash(f"Đã cập nhật hồ sơ của {values['name']}.", "success")
-                    return redirect(url_for("pages.guest_list"), code=303)
                 database.add_guest(values["name"], values["cccd"], values["phone"], password())
                 flash(f"Đã lưu hồ sơ của {values['name']}.", "success")
                 return redirect(url_for("pages.guests"), code=303)
             else:
                 raise ValueError("Thao tác không hợp lệ.")
-        except database.RecordNotFound:
-            flash("Khách hàng không còn tồn tại. Hãy chọn lại từ danh sách.", "error")
-            return redirect(url_for("pages.guest_list"), code=303)
         except (ValueError, Error) as error:
             notify_error(error)
             status = 400 if isinstance(error, ValueError) else 409 if error.errno == 1062 else 503
-    return render_template("guests.html", active="guest_list" if record_id is not None else "guests",
-                           values=values, editing=record_id is not None), status
+    return render_template("guests.html", active="guests",
+                           values=values), status
 
-
-@pages.route("/dich-vu/<int:record_id>/sua", methods=["GET", "POST"], endpoint="edit_service")
 @pages.route("/dich-vu", methods=["GET", "POST"])
-def services(record_id=None):
+def services():
     values = {key: request.form.get(key, "").strip() for key in ("name", "unit", "price", "status")}
     if request.method == "GET":
         values["status"] = validation.SERVICE_STATUSES[0]
     status = 200
-    if record_id is not None and request.method == "GET":
-        try:
-            row = database.get_service(record_id, password())
-            values = dict(zip(("name", "unit", "price", "status"), ("" if v is None else str(v) for v in row)))
-        except database.RecordNotFound:
-            flash("Dịch vụ không còn tồn tại. Hãy chọn lại từ danh sách.", "error")
-            return redirect(url_for("pages.service_list"), code=303)
-        except (ValueError, Error) as error:
-            notify_error(error)
-            return redirect(url_for("pages.service_list"), code=303)
     if request.method == "POST":
         try:
             price = validation.service(values)
-            if record_id is not None:
-                database.update_service(record_id, values["name"], values["unit"], price, values["status"], password())
-                flash(f"Đã cập nhật dịch vụ {values['name']}.", "success")
-                return redirect(url_for("pages.service_list"), code=303)
             database.add_service(values["name"], values["unit"], price, values["status"], password())
             flash(f"Đã lưu dịch vụ {values['name']}.", "success")
             return redirect(url_for("pages.services"), code=303)
-        except database.RecordNotFound:
-            flash("Dịch vụ không còn tồn tại. Hãy chọn lại từ danh sách.", "error")
-            return redirect(url_for("pages.service_list"), code=303)
         except (ValueError, Error) as error:
-            notify_error(error)
-            status = 400 if isinstance(error, ValueError) else 503
-    return render_template("services.html", active="service_list" if record_id is not None else "services",
-                           values=values, editing=record_id is not None, statuses=validation.SERVICE_STATUSES), status
+            notify_error(error, duplicate_message="Tên dịch vụ đã tồn tại.")
+            status = 400 if isinstance(error, ValueError) else 409 if error.errno == 1062 else 503
+    return render_template("services.html", active="services",
+                           values=values, statuses=validation.SERVICE_STATUSES), status

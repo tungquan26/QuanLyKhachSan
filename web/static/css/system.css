@@ -30,7 +30,6 @@
   font-display:swap;
 }
 
-
 :root {
   --ground:#fff;
   --surface:#f7f6f6;
@@ -118,7 +117,6 @@ h3 {font-size:22px; line-height:1.4; letter-spacing:-.4px; margin:0 0 16px;}
   margin-bottom:30px;
 }
 
-
 .field {
   margin-bottom:22px;
 }
@@ -162,7 +160,6 @@ h3 {font-size:22px; line-height:1.4; letter-spacing:-.4px; margin:0 0 16px;}
   appearance:none;
   text-overflow:ellipsis;
 }
-
 
 .form-actions {
   display:flex;
@@ -246,12 +243,23 @@ h3 {font-size:22px; line-height:1.4; letter-spacing:-.4px; margin:0 0 16px;}
   background:#eae9e9;
 }
 
-
 .site-footer {padding:24px 40px; display:flex; justify-content:space-between; gap:20px; font-size:13px; color:var(--muted);}
 .data-panel {min-width:0; overflow:hidden; border:1px solid var(--line); border-radius:12px; background:var(--ground);}
 .table-toolbar {display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; padding:24px;}
 .row-count {margin:6px 0 0; font-size:14px; color:var(--muted);}
 .table-actions {display:flex; flex-wrap:wrap; gap:10px;}
+.cccd-filter {min-width:0;}
+.cccd-filter summary {display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:28px; list-style:none; cursor:pointer;}
+.cccd-filter summary::-webkit-details-marker {display:none;}
+.cccd-filter summary svg {flex:none; color:var(--muted);}
+.cccd-filter summary:hover svg,.cccd-filter[open] summary svg {color:var(--accent);}
+.cccd-filter form {margin-top:12px; contain:inline-size; min-width:0;}
+.cccd-search-input {display:flex; align-items:center; width:100%; min-width:0; border:1px solid var(--control-line); border-radius:var(--radius); background:var(--ground);}
+.cccd-search-input input {flex:1 1 0; width:0; min-width:0; min-height:40px; padding:8px 10px; border:0; border-radius:var(--radius); background:transparent; color:var(--ink); font-size:14px; font-weight:400;}
+.cccd-search-input input:focus-visible {outline:none;}
+.cccd-search-submit {display:inline-flex; align-items:center; justify-content:center; flex:none; width:40px; height:40px; border:0; border-radius:var(--radius); background:transparent; color:var(--accent);}
+.cccd-search-submit:hover {background:var(--accent-soft);}
+.clear-cccd-filter {display:inline-block; margin-top:8px; font-size:13px; font-weight:400; color:var(--accent-hover);}
 .table-scroll {overflow:auto; max-height:64vh; border-top:1px solid var(--line);}
 .table-scroll:focus-visible {outline:3px solid var(--accent); outline-offset:-3px;}
 .data-table {width:100%; border-collapse:separate; border-spacing:0; font-size:15px; text-align:left;}

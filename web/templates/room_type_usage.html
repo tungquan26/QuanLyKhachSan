@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% from 'components/forms.html' import csrf %}
+{% block title %}Sử dụng loại phòng{% endblock %}
+{% block section_name %}BÁO CÁO THỐNG KÊ{% endblock %}
+{% block heading %}Sử dụng loại phòng{% endblock %}
+{% block description %}Thống kê các loại phòng được sử dụng thực tế theo khoảng ngày bạn chọn.{% endblock %}
+{% block content %}
+<div class="report-layout">
+  <section class="form-panel" aria-labelledby="filter-title">
+    <div class="form-heading"><h2 id="filter-title">Điều kiện báo cáo</h2></div>
+    {% include 'components/notices.html' %}
+    <form method="post" action="{{ url_for('pages.room_type_usage') }}">
+      {{ csrf() }}
+      <div class="report-dates">
+        <div class="field">
+          <label for="tu_ngay">Từ ngày</label>
+          <input id="tu_ngay" name="tu_ngay" type="date" value="{{ tu_ngay }}" min="0001-01-01" max="9999-12-31" required>
+        </div>
+        <div class="field">
+          <label for="den_ngay">Đến ngày</label>
+          <input id="den_ngay" name="den_ngay" type="date" value="{{ den_ngay }}" min="0001-01-01" max="9999-12-31" required>
+        </div>
+      </div>
+      <div class="form-actions form-actions-end">
+        <button type="submit" class="button button-primary">Xem báo cáo</button>
+        <button type="submit" class="button" formaction="{{ url_for('pages.export_room_type_usage') }}">Xuất Excel (.xlsx)</button>
+      </div>
+    </form>
+  </section>
+  {% if rows is not none %}
+  <section class="data-panel report-preview" aria-labelledby="report-title">
+    <div class="table-toolbar">
+      <div>
+        <h2 id="report-title">Báo cáo thống kê sử dụng loại phòng</h2>
+        <p class="row-count">Từ ngày {{ tu_ngay[8:10] }}/{{ tu_ngay[5:7] }}/{{ tu_ngay[:4] }} đến ngày {{ den_ngay[8:10] }}/{{ den_ngay[5:7] }}/{{ den_ngay[:4] }}</p>
+        <p class="row-count">{{ rows|length }} loại phòng · {{ total_uses }} lượt sử dụng · {{ total_rooms }} phòng đã dùng</p>
+      </div>
+    </div>
+    <div class="table-scroll" role="region" aria-label="Chi tiết sử dụng loại phòng" tabindex="0">
+      <table class="data-table" aria-labelledby="report-title">
+        <thead><tr><th scope="col">STT</th><th scope="col">Loại phòng</th><th scope="col" class="numeric">Số lượt sử dụng</th><th scope="col" class="numeric">Số phòng đã dùng</th></tr></thead>
+        <tbody>
+          {% for ma, ten, luot, phong in rows %}
+          <tr><td>{{ loop.index }}</td><td>{{ ten }}</td><td class="numeric">{{ luot }}</td><td class="numeric">{{ phong }}</td></tr>
+          {% else %}
+          <tr><td colspan="4" class="empty-state">Không có phòng được sử dụng trong khoảng ngày đã chọn.</td></tr>
+          {% endfor %}
+        </tbody>
+        <tfoot><tr><th scope="row" colspan="2">Tổng cộng</th><td class="numeric">{{ total_uses }}</td><td class="numeric">{{ total_rooms }}</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="report-signatures">
+      <div><p class="report-sign-title">Người tạo báo cáo</p><p>Kế toán / Trưởng bộ phận Lễ tân</p><p>(Ký, ghi rõ họ tên)</p></div>
+      <div><p>{{ ngay_in }}</p><p class="report-sign-title">Ban Giám đốc</p><p>(Người nhận)</p><p>(Ký, ghi rõ họ tên)</p></div>
+    </div>
+  </section>
+  {% endif %}
+  <p class="row-count">Mỗi lượt nhận phòng thực tế được tính một lần nếu thời gian lưu trú giao với khoảng ngày chọn, bao gồm cả ngày cuối. Phòng chưa trả được tính đến hiện tại. Không tính đặt phòng chưa nhận hoặc lượt đã trả trước hay đúng 00:00 ngày bắt đầu. Một phòng dùng nhiều lượt chỉ tính một lần trong “Số phòng đã dùng”.</p>
+</div>
+{% endblock %}

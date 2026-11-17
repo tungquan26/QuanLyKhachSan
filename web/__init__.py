@@ -1,8 +1,6 @@
-"""Local hotel reception website; database credentials never leave the server."""
 import os
 import secrets
 from flask import Flask, request, session, abort
-
 
 def create_app(test_config=None):
     app = Flask(__name__)

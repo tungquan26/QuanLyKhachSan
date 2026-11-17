@@ -4,24 +4,24 @@ Giao diện web tiếng Việt dùng Flask + Jinja, chạy trong trình duyệt,
 
 - `/khach-hang`: tạo hồ sơ khách hàng; nếu CCCD trùng thì báo lỗi và giữ thông tin đã nhập.
 - `/dich-vu`: thêm danh mục dịch vụ trực tiếp, không cần phòng hoặc khách đang lưu trú.
-- `/danh-sach/khach-hang`: xem toàn bộ khách hàng dưới dạng bảng.
+- `/danh-sach/khach-hang`: xem và tra cứu khách hàng theo CCCD.
 - `/danh-sach/dich-vu`: xem toàn bộ dịch vụ dưới dạng bảng.
 
-Chưa triển khai màn hình tìm kiếm nghiệp vụ (mục 6). Không dùng CustomTkinter nữa.
+Trang danh sách khách hàng đồng thời là màn hình tìm kiếm dữ liệu nghiệp vụ (mục 6): bấm kính lúp bên phải tiêu đề cột **CCCD**, nhập số CCCD hoặc một phần số rồi nhấn Enter hoặc kính lúp trong ô nhập để truy vấn MySQL và hiển thị bảng kết quả cùng số lượng tìm thấy. Bấm **Xóa lọc** để xem toàn bộ khách hàng. Chỉ tìm trong trường CCCD. Không dùng CustomTkinter nữa.
 
 ## Báo cáo doanh thu dịch vụ
 
-Mở **Báo cáo thống kê → Doanh thu dịch vụ** trên sidebar, hoặc `/bao-cao/doanh-thu-dich-vu`. Chọn khoảng ngày, nhập tên đơn vị trên báo cáo rồi bấm **Xem báo cáo** hoặc **Xuất Excel (.xlsx)**. Cài lại `pip install -r requirements.txt` để có thư viện `openpyxl`.
+Mở **Báo cáo thống kê → Doanh thu dịch vụ** trên sidebar, hoặc `/bao-cao/doanh-thu-dich-vu`. Chọn khoảng ngày rồi bấm **Xem báo cáo** hoặc **Xuất Excel (.xlsx)**. Cài lại `pip install -r requirements.txt` để có thư viện `openpyxl`.
 
-Báo cáo đọc bảng `LanSuDungDichVu` kết hợp `DichVu`, gồm cả ngày bắt đầu và ngày kết thúc. Doanh thu tính bằng số lượng nhân đơn giá áp dụng lúc sử dụng; một dịch vụ có nhiều đơn giá được tách thành các dòng riêng. Số lượng lẻ và phần lẻ của thành tiền được giữ nguyên. Tên đơn vị chỉ dùng làm tiêu đề, không lọc dữ liệu theo chi nhánh. File Excel giữ mẫu báo cáo với tổng cộng, ngày lập, vùng ký và cấu hình in A4. Ngày lập dùng múi giờ Việt Nam.
+Báo cáo đọc bảng `LanSuDungDichVu` kết hợp `DichVu`, gồm cả ngày bắt đầu và ngày kết thúc. Doanh thu tính bằng số lượng nhân đơn giá áp dụng lúc sử dụng; một dịch vụ có nhiều đơn giá được tách thành các dòng riêng. Số lượng lẻ và phần lẻ của thành tiền được giữ nguyên. File Excel giữ mẫu báo cáo với tổng cộng, ngày lập, vùng ký và cấu hình in A4. Ngày lập dùng múi giờ Việt Nam.
 
 Tài khoản MySQL cần quyền `SELECT` trên hai bảng này. Không có dữ liệu thì báo cáo hiển thị rỗng với tổng bằng 0; lỗi truy vấn sẽ báo lỗi và không tải file Excel. Không cần chạy lại SQL hay tạo thủ tục. Các URL cũ `/bao-cao`, `/bao-cao-2`, `/bao_cao_2` vẫn dùng được.
 
 Giao diện dạng bảng điều khiển: sidebar bên trái có nhóm **Quản lý thông tin** chứa hai mục con **Hồ sơ khách hàng** và **Danh mục dịch vụ**; vùng nội dung bên phải chứa tiêu đề và biểu mẫu. Trên màn hình nhỏ, dùng nút **Menu** để mở thanh chức năng.
 
-Nhóm **Danh sách dữ liệu** trên sidebar chứa **Danh sách khách hàng** và **Danh sách dịch vụ**. Hai trang đọc toàn bộ dòng từ bảng `KhachHang`/`DichVu`, sắp xếp theo mã tự tăng từ nhỏ đến lớn để dữ liệu nhập trước ở trên, nhập sau ở cuối danh sách, hiển thị tổng số bản ghi. Cột mã khóa chính được ẩn trên giao diện và thay bằng **STT**, đánh số liên tục từ 1 tăng dần; mã trong database được giữ nguyên. Nút **Làm mới** đọc lại dữ liệu MySQL, kể cả dữ liệu thêm từ Workbench, và đánh lại STT theo danh sách hiện tại. Bảng cuộn ngang trên màn hình nhỏ; giá trị SQL NULL hiển thị là `NULL`, chuỗi rỗng giữ nguyên ô trống. Mỗi dòng có nút **Sửa** mở biểu mẫu chứa dữ liệu hiện tại.
+Nhóm **Danh sách dữ liệu** trên sidebar chứa **Danh sách khách hàng** và **Danh sách dịch vụ**. Hai trang đọc dữ liệu từ bảng `KhachHang`/`DichVu`, sắp xếp theo mã tự tăng từ nhỏ đến lớn để dữ liệu nhập trước ở trên, nhập sau ở cuối danh sách, hiển thị số bản ghi hoặc số kết quả tra cứu. Cột mã khóa chính được ẩn trên giao diện và thay bằng **STT**, đánh số liên tục từ 1 tăng dần; mã trong database được giữ nguyên. Nhấn **F5** để đọc lại dữ liệu MySQL, kể cả dữ liệu thêm từ Workbench, giữ bộ lọc CCCD hiện tại và đánh lại STT. Kính lúp bên phải tiêu đề cột **CCCD** mở ô nhập tìm chuỗi con trong số căn cước công dân; ký tự `%` và `_` được hiểu theo mẫu tìm kiếm `like`. Truy vấn dùng tham số, không ghép từ khóa vào SQL. Khi không khớp bản ghi nào, trang hiển thị thông báo không tìm thấy. Bảng cuộn ngang trên màn hình nhỏ; giá trị SQL NULL hiển thị là `NULL`, chuỗi rỗng giữ nguyên ô trống. Chức năng thêm vẫn nằm trong nhóm **Quản lý thông tin**.
 
-Để chỉnh dữ liệu: vào danh sách khách hàng/dịch vụ → **Sửa** ở dòng cần đổi → chỉnh thông tin → **Lưu thay đổi**. Có thể sửa họ tên, CCCD, số điện thoại; hoặc tên dịch vụ, đơn vị tính, đơn giá, trạng thái cung cấp. Nút **Hủy** quay về danh sách. Cập nhật theo mã gốc, không tạo dòng mới, không đổi khóa chính hay thứ tự dòng. Khi dữ liệu không hợp lệ hoặc CCCD trùng, biểu mẫu giữ thông tin đã nhập và báo lỗi. Bản ghi đã bị xóa sẽ được thông báo và quay về danh sách.
+Hai danh sách chỉ hỗ trợ xem và tra cứu; chức năng sửa khách hàng và dịch vụ đã được loại bỏ.
 
 ## Chạy trên Windows
 
@@ -41,14 +41,24 @@ Kết nối mặc định: `127.0.0.1:3306`, tài khoản `root`, database `hote
 
 ## Cấu trúc
 
-Hai trang Khách hàng và Danh mục dịch vụ kiểm tra dữ liệu ở phía server, dùng `INSERT` có tham số để thêm và `UPDATE ... WHERE` có tham số để sửa bảng `KhachHang` và `DichVu`, rồi commit khi thành công. Không cần stored procedure hoặc chạy `--init-db`. Tài khoản MySQL cần quyền `SELECT`, `INSERT` và `UPDATE` trên cả `KhachHang` và `DichVu`.
+Các truy vấn của web được đọc từ thư mục `sql`, nhóm theo đối tượng:
+
+- `khach-hang.sql`: lần lượt là truy vấn danh sách, tra cứu CCCD và thêm khách hàng.
+- `dich-vu.sql`: lần lượt là truy vấn danh sách và thêm dịch vụ.
+- `bao-cao-doanh-thu-dich-vu.sql`: thống kê doanh thu dịch vụ.
+
+Mỗi file truy vấn có `use hotel`, cấu hình UTF-8 và các lệnh `set @ten_bien = ...` với giá trị mẫu nếu cần tham số. Trong MySQL Workbench, chạy hai dòng đầu rồi chọn chạy phần chức năng cần dùng, bao gồm các lệnh `set` của phần đó. Phần thêm sẽ ghi dữ liệu mẫu vào database, tự lưu nếu Workbench bật autocommit. Chạy toàn bộ file gộp cũng thực hiện thao tác thêm; chạy lại có thể báo trùng CCCD hoặc tên dịch vụ.
+
+`database.py` dùng `load_sql(filename, query_index=0)` để lấy một câu `select` hoặc `insert` theo thứ tự trong file, đánh số từ 0. File khách hàng dùng 0 cho danh sách, 1 cho tra cứu CCCD, 2 cho thêm; file dịch vụ dùng 0 cho danh sách, 1 cho thêm. Không cần comment đánh dấu. Giữ đúng thứ tự truy vấn; nếu đổi thứ tự phải cập nhật chỉ số tương ứng trong Python. Các file báo cáo dùng chỉ số mặc định 0. Web chỉ thực thi câu truy vấn được chọn, không chạy toàn bộ file. Các biến `@ten_bien` được chuyển thành `%s` theo thứ tự xuất hiện, rồi truyền giá trị thật từ web riêng qua thư viện MySQL. Web không chạy phần `set` mẫu. Mỗi câu truy vấn bắt đầu ở đầu dòng và kết thúc bằng dấu chấm phẩy, không chứa dấu chấm phẩy trong chuỗi; tên biến chỉ dùng chữ thường, chữ số và dấu gạch dưới, đặt ở vị trí tham số. Các file `khach-san.sql` và `nhap-lieu-khach-san.sql` không được bộ đọc tự động thực thi.
+
+Hai trang Khách hàng và Danh mục dịch vụ kiểm tra dữ liệu ở phía server, dùng `INSERT` có tham số rồi commit khi thành công. Tài khoản MySQL cần quyền `SELECT` và `INSERT` trên cả `KhachHang` và `DichVu`.
 
 ```text
 app.py                         Điểm chạy web, nhập mật khẩu ở terminal
 sql/                           Schema khách sạn và SQL cho hai form hiện tại
 config.py / database.py         Cấu hình và thao tác MySQL hiện có
 web/__init__.py                 Application factory, CSRF, cấu hình phiên
-web/routes.py                   Các trang thêm/sửa GET/POST và danh sách GET
+web/routes.py                   Các trang thêm GET/POST, danh sách và báo cáo
 web/validation.py               Kiểm tra dữ liệu phía server
 web/templates/base.html        Sidebar, thanh tiêu đề, bố cục, thông báo, footer
 web/templates/components/      Macro trường nhập, select, CSRF dùng chung
@@ -63,7 +73,26 @@ docs/ui-conventions.md         Cách áp dụng thiết kế và thêm trang m�
 tests/test_web.py              Kiểm thử HTTP, validation, database mock
 ```
 
-## Kiểm thử
+## Chống trùng danh mục
+
+Tên dịch vụ và tên loại phòng phải duy nhất, lần lượt được bảo vệ bởi
+`uq_dichvu_tendichvu` và `uq_loaiphong_tenloaiphong`. Dịch vụ cùng tên vẫn bị
+từ chối dù khác đơn vị tính, giá hoặc trạng thái. Việc so sánh tên dùng
+collation hiện có của cột; form loại khoảng trắng đầu và cuối trước khi lưu.
+
+Database mới nhận các ràng buộc từ `sql/khach-san.sql`. Với database đã có dữ
+liệu, mở `sql/nang-cap-unique-danh-muc.sql` trong Workbench và chạy hai truy vấn
+kiểm tra trước. Nếu có kết quả, xử lý các bản ghi trùng theo nghiệp vụ rồi kiểm
+tra lại; script không tự xóa hoặc gộp dữ liệu. Khi cả hai kết quả rỗng, bỏ comment
+và chạy từng lệnh `alter table` cuối file một lần. Không chạy các lệnh này nếu
+database đã có ràng buộc tương ứng. Các lệnh thay đổi cấu trúc không tạo thành
+một transaction chung; nếu một lệnh thất bại, kiểm tra cấu trúc trước khi chạy lại.
+
+Form dịch vụ báo “Tên dịch vụ đã tồn tại.” và giữ thông tin nhập khi gặp tên
+trùng (HTTP 409). CCCD khách hàng và mã phiếu trên hóa đơn tiếp tục có `unique`;
+các bảng khác giữ khóa chính và các ràng buộc hiện tại.
+
+## Chạy kiểm thử
 
 ```powershell
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
